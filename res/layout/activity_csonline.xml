@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical" ><TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Quận huyện" />
+
+            <Spinner
+                android:id="@+id/spn_quanhuyen"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Phường xã" />
+
+            <Spinner
+                android:id="@+id/spn_phuongxaa"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                android:id="@+id/include1"
+                layout="@layout/loaidichvu_spn" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Yêu cầu" />
+
+            <Spinner
+                android:id="@+id/spn_yeucau"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" />
+<TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên khách hàng" />
+
+            <EditText
+                android:id="@+id/txtTenKhachHang"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Địa chỉ lắp đặt" />
+
+            <EditText
+                android:id="@+id/txtDiaChiLapDat"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên người liên hệ" />
+
+            <EditText
+                android:id="@+id/txtTenNguoiLienHe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Địa chỉ liên hệ" />
+
+            <EditText
+                android:id="@+id/txtDiaChiLienHe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Số đt liên hệ" />
+
+            <EditText
+                android:id="@+id/txtDienThoaiLienHe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Email" />
+
+            <EditText
+                android:id="@+id/txtEmail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Thời gian liên hệ" />
+
+            <EditText
+                android:id="@+id/txtThoiGianLienHe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Người giới thiệu" />
+
+            <EditText
+                android:id="@+id/txtNguoiGioiThieu"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Ghi chú" />
+
+            <EditText
+                android:id="@+id/txtGhiChu"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

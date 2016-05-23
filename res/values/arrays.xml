@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="khoang_cach">
+        <item>100</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+    </string-array>
+     <string-array name="loai_mang">
+        <item>Cáp quang</item>
+        <item>Cáp đồng</item>
+    </string-array>
+    <string-array name="Question">
+        <item>Tra cứu, báo hỏng, đo thử của DHSC</item>
+        <item>Nhận, khóa, báo tồn phiếu của DHSC</item>
+        <item>Tra cứu lý lịch sửa chữa</item>
+        <item>Hoàn công các dịch vụ khác của PTTB</item>
+        <item>Ảnh của người dùng</item>
+        <item>Hệ thống phím tắt</item>
+    </string-array>
+    <string-array name="help">
+        <item>Về phần mềm</item>
+        <item>Giới thiệu chung</item>
+        <item>Yêu cầu cài đặt</item>
+        <item>Tra cứu, báo hỏng, đo thử của DHSC</item>
+        <item>Nhận, khóa, báo tồn phiếu của DHSC</item>
+        <item>Tra cứu lý lịch sửa chữa</item>
+        <item>Hoàn công các dịch vụ khác của PTTB</item>
+        <item>Ảnh của người dùng</item>
+        <item>Hệ thống phím tắt</item>
+    </string-array>
+    <string-array name="cac_kieu_baohong">
+        <item>Theo mã</item>
+        <item>Theo Account</item>
+        <item>Theo số điện thoại</item>
+    </string-array>
+    <string-array name="cac_kieu_do">
+        <item>Đo trạng thái BRAS</item>
+        <item>Theo trạng thái DSLAM</item>
+        <item>Theo trạng thái MEN-GPON</item>
+    </string-array>
+    <string-array name="loai_ket_cuoi">
+        <item>Tổng đài</item>
+        <item>Tủ/ hộp/ nhà cáp</item>
+        <item>Măng xông đồng</item>
+        <item>Măng xông quang</item>
+        <item>Splitter cấp 1</item>
+        <item>Splitter cấp 2</item>
+        <item>ODF</item>
+    </string-array>
+    <string-array name="loai_tu_chua">
+        <item>Măng xông</item>
+        <item>ODF</item>
+    </string-array>
+    <string-array name="tag_name_thongtindichvu_dhsc">
+        <item>Ma_DichVu-Mã dịch vụ</item>
+        <item>Ma_TC-Mã Thi Công</item>
+        <item>Account-Account</item>
+        <item>Ten_TB-Tên Thuê Bao</item>
+        <item>DiaChi-Địa chỉ thuê bao</item>
+        <item>SoLienHe-Số liên hệ</item>
+        <item>LoaiDichVu-Loại Dịch Vụ</item>
+        <item>TenPhuongXa-Tên Phường Xã</item>
+        <item>TenQuanHuyen-Tên Quận Huyện</item>
+        <item>TrangThaiTB-Trạng Thái Thuê Bao</item>
+    </string-array>
+    <string-array name="loai_dichvu_dothu">
+        <item>MyTV</item>
+        <item>MegaVNN</item>
+        <item>MegaWan</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VNPT-360</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+
+    <string-array name="marray">
+        <item>India</item>
+        <item>Pakistan</item>
+        <item>America</item>
+        <item>England</item>
+        <item>Russia</item>
+        <item>China</item>
+        <item>Italy</item>
+    </string-array>
+
+    <string name="setting">setting</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Cổng tác nghiệp VNPT</string>
+    <string name="LoaiDichVu">Loại Dịch Vụ</string>
+    <string name="chi_tiet_phieu">Chi tiết phiếu</string>
+    <string name="nhan">Nhận</string>
+    <string name="khoa">Khóa</string>
+    <string name="ton">Tồn</string>
+    <string name="bao">Báo</string>
+    <string name="chu_thich"><u>Chú thích:</u></string>
+    <string name="chu_thich_hong_lai">• Những phiếu hỏng lại: 1 - trong ngày, 2- trong 2 ngày liên tiếp, 3 - trước đó 2 ngày!</string>
+    <string name="chu_thich_thong_so_DSLAM">• Các thông số đo DSLAM cho MegaVNN (D).</string>
+    <string name="chu_thich_DSLAM_1">\t•D0-Mã DSLAM/ D1- Cổng/ D2-Gói cước.</string>
+    <string name="chu_thich_DSLAM_2">\t•D3-Trạng thái cổng.</string>
+    <string name="chu_thich_DSLAM_3">\t•D4-Tốc độ thực tế(down). </string>
+    <string name="chu_thich_DSLAM_4">\t•D5Tốc độ tối đa(down).</string>
+    <string name="chu_thich_DSLAM_5">\t•D7-Tỷ số tín hiệu tạp âm(down).</string>
+    <string name="thongso">•Các thông số đo BRAS cho MegaVNN (B)</string>
+    <string name="thongso_1">\t•B2-Trạng thái. Trạng thái cổng. </string>
+    <string name="thongso_2">\t•B3-Địa chỉ IP. Tốc độ thực tế(down). </string>
+    <string name="DoThuAll"></string>
+    <string name="loai_ket_cuoi">loai_ket_cuoi</string>
+    <string name="hoan_cong">Hoàn công</string>
+    <string name="chup_anh">Chụp ảnh</string>
+    <string name="bao_hoan_cong_cac_dich_vu">Báo hoàn công các dịch vụ</string>
+    <string name="chon_ngay">Chọn ngày</string>
+    <string name="chon_thoi_gian">Chọn thời gian</string>
+
+</resources>

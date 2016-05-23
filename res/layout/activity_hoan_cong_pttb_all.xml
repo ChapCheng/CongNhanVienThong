@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ScrollView
+        android:id="@+id/scroll_main"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:padding="5dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="NHẬP HOÀN CÔNG TẠI NHÀ KHÁCH HÀNG"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:text="" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@color/blue" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mã TH:" />
+
+                <TextView
+                    android:id="@+id/tvMaTH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="3dp"
+                android:background="@color/green" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mã thuê bao:" />
+
+                <TextView
+                    android:id="@+id/tvMaTB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="3dp"
+                android:background="@color/green" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tên thuê bao:" />
+
+                <TextView
+                    android:id="@+id/tvTenTB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="3dp"
+                android:background="@color/green" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Địa chỉ thuê bao:" />
+
+                <TextView
+                    android:id="@+id/tvDiaChiTB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="3dp"
+                android:background="@color/green" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Loại hình thuê bao:" />
+
+                <TextView
+                    android:id="@+id/tvLoaihinhTB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="2dp"
+                android:background="@color/blue" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoText="true"
+                    android:background="@color/white"
+                    android:gravity="left"
+                    android:lines="2"
+                    android:text="Người cài đặt: " />
+
+                <TextView
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:text=" " />
+
+                <EditText
+                    android:id="@+id/edNguoiCaiDat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoText="true"
+                    android:background="@color/white"
+                    android:lines="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoText="true"
+                    android:background="@color/white"
+                    android:gravity="left"
+                    android:lines="2"
+                    android:text="Ngày cài đặt: " />
+
+                <TextView
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:text=" " />
+
+                <TextView
+                    android:id="@+id/edNgayCaiDat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="dd/mm/yyyy hh24:mi" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="2dp" >
+
+                <CheckBox
+                    android:id="@+id/check_co_toado"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cho phép cập nhật lại vị trí và ảnh" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/black"
+                android:padding="2dp" >
+
+                <fragment
+                    android:id="@+id/mapo"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    class="view.YourMapFragment" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/tvHDTB_ID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoText="true"
+                    android:background="@color/white"
+                    android:lines="2"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

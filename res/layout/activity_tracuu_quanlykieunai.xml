@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nhập mã tra cứu" />
+
+        <EditText
+            android:id="@+id/ma_tra_cuu_qlkn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập mã" />
+
+        <TextView
+            android:id="@+id/thongbao_ketquatracuu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+		<ListView
+            android:id="@+id/lylichkhieunai_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+        </ListView>        
+    </LinearLayout>
+
+</RelativeLayout>

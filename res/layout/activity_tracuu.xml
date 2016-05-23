@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:padding="5dp" >
+
+    <ScrollView
+        android:id="@+id/scroll_main"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dịch Vụ"
+                android:textColor="@color/black" />
+
+            <Spinner
+                android:id="@+id/loaiDichVu"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/app_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nghiệp Vụ"
+                android:textColor="@color/black" />
+
+            <Spinner
+                android:id="@+id/nghiepVu"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/app_name" />
+
+            <TextView
+                android:id="@+id/lblNhap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhập"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/inputData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhap vao day"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/lblKetQua"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kết quả" />
+
+            <include layout="@layout/multi_line" />
+
+            <fragment
+                android:id="@+id/mapo"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="5dp"
+                class="view.YourMapFragment" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

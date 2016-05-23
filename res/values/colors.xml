@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="blue">#0002A8</color>
+    <color name="green">#C8C8FF</color>
+    <color name="mau_nen_menu">#39394A</color>
+    <color name="mau_nen_title_menu">#414156</color>
+    <color name="face">#456099</color>
+    <color name="title_button">#D3D6DB</color>
+    <color name="map_tron">#DCFFFF</color>
+    
+</resources>

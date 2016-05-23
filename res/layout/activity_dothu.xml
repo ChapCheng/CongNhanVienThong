@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:contentDescription="@string/thongso"
+    android:fillViewport="true"
+    android:padding="5dp" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Loại đo"
+                android:textColor="@color/black" />
+
+            <Spinner
+                android:id="@+id/loai_do"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/cac_kieu_do"
+                android:prompt="@string/app_name" />
+
+            <LinearLayout
+                android:id="@+id/baohong_ADSL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kiểu đo chi tiết"
+                    android:textColor="@color/black" />
+                <Spinner
+                android:id="@+id/spn_kieu_do_chitiet"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/app_name" />
+
+                
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/lblNhap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mã dịch vụ"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/inputMa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhap vao day"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/lblKetQua"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kết quả" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/ketqua"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:minLines="8"
+                    android:scrollHorizontally="true" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:contentDescription="@string/thongso"
+    android:fillViewport="true"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Loại đo"
+            android:textColor="@color/black" />
+
+        <Spinner
+            android:id="@+id/spn_loai_dichvu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/loai_dichvu_dothu" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Mã Dịch Vụ" />
+
+        <EditText
+            android:id="@+id/txt_ma_dv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:padding="2dp" >
+
+            <TextView
+                android:id="@+id/ketqua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoText="true"
+                android:background="@color/white"
+                android:minLines="8"
+                android:scrollHorizontally="true" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

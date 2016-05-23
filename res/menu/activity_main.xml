@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/find_BTS"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:orderInCategory="0"
+        android:title="Quét trạm BTS"/>
+    <item
+        android:id="@+id/BTS_current"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:orderInCategory="1"
+        android:title="BTS hiện tại"/>
+    <item
+        android:id="@+id/point_me"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:orderInCategory="2"
+        android:title="BTS hiện tại"/>
+    <item
+        android:id="@+id/chance_map_type"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:orderInCategory="3"
+        android:title="BTS hiện tại"/>
+
+</menu>
