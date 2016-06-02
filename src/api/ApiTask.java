@@ -24,8 +24,8 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
+import android.content.Context;
 import android.util.Log;
-import congnhanvienthong.entity.ApiResultApi;
 import webservice.WebProtocol;
 
 public class ApiTask implements WebProtocol {
@@ -37,6 +37,8 @@ public class ApiTask implements WebProtocol {
 	public String result;
 	public String erros;
 	public String mess;
+	public Context context;
+	public int totalSize = 0;
 
 	public ApiTask() {
 		// TODO Auto-generated constructor stub
@@ -130,6 +132,36 @@ public class ApiTask implements WebProtocol {
 			e.printStackTrace();
 		}
 		return lstObject;
+	}
+
+	public <T> List<T> getListTotalSize(final Class<T> clazz, String name) {
+
+		ArrayList<T> lstObject = new ArrayList<T>();
+		try {
+			JSONObject jsonRes = new JSONObject(result);
+			JSONObject jos = jsonRes.getJSONObject("Data");
+			JSONArray jsonArray = jos.getJSONArray(name);
+			mess = jsonRes.getString("Message");
+			erros = jsonRes.getString("IsError");
+			totalSize = jos.getInt("TotalSize");
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				Gson gson = new Gson();
+				T t = (T) gson.fromJson(jsonObject.toString(), clazz);
+				lstObject.add(t);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lstObject;
+	}
+
+	@Override
+	public Void SetConText(Context context) {
+		// TODO Auto-generated method stub
+		this.context = context;
+		return null;
 	}
 
 }

@@ -15,8 +15,6 @@ public class GetLoaiSuaChiTietTask extends BaseTask {
 		User_WS = "wscskh";
 		Pass_WS = "wscskh@456";
 		headerTitle = "AuthHeaderDhscTtp";
-		para.add("loaiSuaId");
-		para.add("tinhThanhPhoId");
 	}
 
 	@Override

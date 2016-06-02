@@ -5,15 +5,18 @@ import control.AnnotationField;
 public class ThongTinTraCuuChung {
 	@AnnotationField(hienthi = true, order = 0, tenNhan = "Tên Khách Hàng")
 	String TenKhachHang;
+	@AnnotationField(hienthi = false, order = 0, tenNhan = "Mã khách hàng")
 	String MaKhachHang;
 	@AnnotationField(hienthi = true, order = 1, tenNhan = "Địa chỉ khách  hàng")
 	String DiaChiKhachHang;
-	@AnnotationField(hienthi = true, order = 2, tenNhan = "Tên Thanh Toán")
+	@AnnotationField(hienthi = false, order = 2, tenNhan = "Tên Thanh Toán")
 	String TenThanhToan;
 	String MaThanhToan;
-	@AnnotationField(hienthi = true, order = 3, tenNhan = "Điạ chỉ thanh toán")
+	@AnnotationField(hienthi = false, order = 3, tenNhan = "Điạ chỉ thanh toán")
 	String DiaChiThanhToan;
+	@AnnotationField(hienthi = false, order = 0, tenNhan = "Tên thuê bao")
 	String TenThueBao;
+	@AnnotationField(hienthi = true, order = 2, tenNhan = "Mã thuê bao")
 	String MaThueBao;
 	String DiaChiThueBao;
 	String MaSoThue;
@@ -22,6 +25,7 @@ public class ThongTinTraCuuChung {
 	String DienThoaiLienHe;
 	String MaTuyenThu;
 	String SoTaiKhoan;
+	@AnnotationField(hienthi = false, order = 0, tenNhan = "Tên dịch vụ viễn thông")
 	String TenDichVuVienThong;
 	int DichVuVienThongId;
 	int KhachHangId;

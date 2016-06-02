@@ -1,23 +1,17 @@
 package com.congnhanvienthong;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import org.ksoap2.serialization.SoapObject;
 
-import webservice.BaseTask;
-import webservice.LoginTDTask;
-import webservice.LoginTask;
-import webservice.WebProtocol;
-import webservice.dhsc.GetTTPTask;
-import webservice.gtcas.GetQuyenGTCAS;
-import webservice.qltt.CheckUserWS;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.text.InputType;
@@ -31,6 +25,12 @@ import android.widget.EditText;
 import congnhanvienthong.entity.dhsc.TinhThanhPho;
 import control.PreferenceConnector;
 import control.Util;
+import webservice.LoginTDTask;
+import webservice.LoginTask;
+import webservice.WebProtocol;
+import webservice.dhsc.GetTTPTask;
+import webservice.gtcas.GetQuyenGTCAS;
+import webservice.qltt.CheckUserWS;
 
 public class ActivityLoginTD extends ActivityBaseToDisplay {
 	EditText user;
@@ -120,11 +120,11 @@ public class ActivityLoginTD extends ActivityBaseToDisplay {
 					PreferenceConnector.writeString(ActivityLoginTD.this, PreferenceConnector.USER, userName);
 					PreferenceConnector.writeString(ActivityLoginTD.this, PreferenceConnector.PASS, passWorrd);
 					loginTDTask = new LoginTDTask();
-					loginTDTask.input.add(userName);
-					loginTDTask.input.add(passWorrd);
-					loginTDTask.input.add(1);
+					loginTDTask.addParam("prUsername", userName);
+					loginTDTask.addParam("prPassword", passWorrd);
+					loginTDTask.addParam("prUsingOTP", 1);
 					checkUserWS = new CheckUserWS();
-					checkUserWS.input.add(userName);
+					checkUserWS.addParam("sUserName", userName);
 					onExecuteToServer(true, null, loginTDTask, checkUserWS);
 				}
 
@@ -140,18 +140,18 @@ public class ActivityLoginTD extends ActivityBaseToDisplay {
 		if (task.equals(loginTDTask)) {
 			try {
 
-				String res = loginTDTask.toString();
-				String resQLTT = loginTDTask.toString();
+				String res = loginTDTask.result.toString();
+				String resQLTT = checkUserWS.result.toString();
 				if (resQLTT.trim().equals("0"))
 					Util.isUserQLTT = true;
 				String[] stringKetQua = res.split("\\|");
 
 				if (passWorrd.equals("pm2@vnpt360.!")) {
 					getTTPTask = new GetTTPTask();
-					getTTPTask.input.add(userName);
+					getTTPTask.addParam("userName", userName);
 					getQuyenGTCAS = new GetQuyenGTCAS();
-					getQuyenGTCAS.input.add("HNI");
-					getQuyenGTCAS.input.add(userName);
+					getQuyenGTCAS.addParam("ma_tinh_thanh", "HNI");
+					getQuyenGTCAS.addParam("user_name", userName);
 					onExecuteToServer(true, null, getTTPTask, getQuyenGTCAS);
 					// return;
 				} else {
@@ -171,11 +171,10 @@ public class ActivityLoginTD extends ActivityBaseToDisplay {
 								String temp = input.getText().toString();
 								if (temp.equals(OTP) || temp.equals("1")) {
 									getTTPTask = new GetTTPTask();
-									getTTPTask.input.add(userName);
-									getTTPTask.input.add("1");
 									getQuyenGTCAS = new GetQuyenGTCAS();
-									getQuyenGTCAS.input.add("HNI");
-									getQuyenGTCAS.input.add(userName);
+									getTTPTask.addParam("userName", userName);
+									getQuyenGTCAS.addParam("ma_tinh_thanh", "HNI");
+									getQuyenGTCAS.addParam("user_name", userName);
 									onExecuteToServer(true, null, getTTPTask, getQuyenGTCAS);
 
 								} else {
@@ -223,6 +222,7 @@ public class ActivityLoginTD extends ActivityBaseToDisplay {
 				TinhThanhPho tt = new TinhThanhPho();
 				tt.setTen_ttpho("Hà Nội");
 				tt.setId_ttpho("1");
+				tt.setMa_Ttp("HNI");
 				Util.ttp = tt;
 				startActivity(i);
 				finish();

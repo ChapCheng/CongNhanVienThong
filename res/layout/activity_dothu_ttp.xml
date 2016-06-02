@@ -15,16 +15,34 @@
         android:orientation="vertical" >
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Loại đo"
-            android:textColor="@color/black" />
+            android:text="Kiểu đo" />
 
         <Spinner
-            android:id="@+id/spn_loai_dichvu"
+            android:id="@+id/spnKieuDo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/loai_dichvu_dothu" />
+            android:entries="@array/cac_kieu_do" />
+
+        <LinearLayout
+            android:id="@+id/viewLoaiDichVu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Loại dịch vụ"
+                android:textColor="@color/black" />
+
+            <Spinner
+                android:id="@+id/spn_loai_dichvu"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/loai_dichvu_dothu" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="fill_parent"

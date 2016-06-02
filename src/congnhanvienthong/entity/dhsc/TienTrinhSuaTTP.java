@@ -3,19 +3,28 @@ package congnhanvienthong.entity.dhsc;
 import control.AnnotationField;
 
 public class TienTrinhSuaTTP {
+	public String NgayNhap;
+
+	public String getNgayNhap() {
+		return NgayNhap;
+	}
+
+	public void setNgayNhap(String ngayNhap) {
+		NgayNhap = ngayNhap;
+	}
 
 	private String ID;
-	@AnnotationField(hienthi = true, order = 1, tenNhan = "Mã Dịch Vụ")
+	@AnnotationField(hienthi = false, order = 1, tenNhan = "Mã Dịch Vụ")
 	private String Ma_Dv;
 	private String Account;
 	private String Ten_TB;
 	private String DiaChi;
 	private String SoLienHe_Kh;
 	private String Ma_DonVi;
-	@AnnotationField(hienthi = false, order = 5, tenNhan = "Thời gian")
+	@AnnotationField(hienthi = true, order = 1, tenNhan = "Thời gian")
 	private String ThoiGian;
 
-	@AnnotationField(hienthi = true, order = 0, tenNhan = "Vệ Tinh")
+	@AnnotationField(hienthi = false, order = 0, tenNhan = "Vệ Tinh")
 	private String VeTinh;
 
 	private String NguoiNhap;
@@ -24,10 +33,10 @@ public class TienTrinhSuaTTP {
 	private String NguoiThucHien;
 	@AnnotationField(hienthi = false, order = 1, tenNhan = "Số ĐT Người Thực Hiện")
 	private String SoLienHe_NguoiThucHien;
-	@AnnotationField(hienthi = false, order = 4, tenNhan = "Nội dung thực hiện")
+	@AnnotationField(hienthi = true, order = 3, tenNhan = "Nội dung thực hiện")
 	private String ndThucHien;
 
-	@AnnotationField(hienthi = false, order = 2, tenNhan = "Nghiệp vụ")
+	@AnnotationField(hienthi = true, order = 2, tenNhan = "Nghiệp vụ")
 	private String NghiepVu;
 	@AnnotationField(hienthi = false, order = 3, tenNhan = "Nội dung xuất")
 	private String ndXuat;

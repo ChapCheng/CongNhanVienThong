@@ -44,7 +44,7 @@ public class ActivityPhieuDuyetXacMinhKhieuNai extends ActivityBaseToDisplay {
 		thongbaoKetQua = (TextView) body.findViewById(R.id.thongbao_phieuduyet_xm_kn);
 		Task task = new Task();
 		getPhieuDuyetXM = new GetPhieuDuyetXacMinhKhieuNaiTask();
-		getPhieuDuyetXM.input.add(Util.userName.trim());
+		getPhieuDuyetXM.addParam("userName", Util.userName.trim());
 		task.execute(getPhieuDuyetXM);
 	}
 

@@ -20,9 +20,9 @@ public class GetLyDoTonTask extends BaseTask {
 		User_WS = "wscskh";
 		Pass_WS = "wscskh@456";
 		headerTitle = "AuthHeaderDhscTtp";
-		para.add("loaiDichVuId");
-		para.add("nhomTonId");
-		para.add("tinhThanhPhoId");
+		// para.add("loaiDichVuId");
+		// para.add("nhomTonId");
+		// para.add("tinhThanhPhoId");
 	}
 
 	@Override

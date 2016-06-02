@@ -1,5 +1,7 @@
 package congnhanvienthong.entity.qltt;
 
+import java.util.ArrayList;
+
 import control.AnnotationField;
 
 public class ThongTinTraCuoc {
@@ -13,10 +15,10 @@ public class ThongTinTraCuoc {
 	private String TenThanhToan;
 	@AnnotationField(hienthi = true, order = 3, tenNhan = "Địa chỉ")
 	private String DiaChi;
-	@AnnotationField(hienthi = true, order = 4, tenNhan = "Nợ")
-	private ThongTinNo[] ThongTinNo;
 
-	private String ThongTinNoString;
+	private ArrayList<ThongTinNo> ThongTinNo;
+	@AnnotationField(hienthi = true, order = 4, tenNhan = "Nợ")
+	private String ThongTinNoString = "<br>";
 
 	public String getErrorCode() {
 		return ErrorCode;
@@ -58,11 +60,11 @@ public class ThongTinTraCuoc {
 		DiaChi = diaChi;
 	}
 
-	public ThongTinNo[] getThongTinNo() {
+	public ArrayList<congnhanvienthong.entity.qltt.ThongTinNo> getThongTinNo() {
 		return ThongTinNo;
 	}
 
-	public void setThongTinNo(ThongTinNo[] ThongTinNo) {
+	public void setThongTinNo(ArrayList<congnhanvienthong.entity.qltt.ThongTinNo> ThongTinNo) {
 		this.ThongTinNo = ThongTinNo;
 	}
 
@@ -70,9 +72,9 @@ public class ThongTinTraCuoc {
 		return ThongTinNoString;
 	}
 
-	public void setThongTinNoString(String thongTinNoString) {
-		for (int i = 0; i < ThongTinNo.length; i++) {
-			ThongTinNoString = i + "<br>";
+	public void setThongTinNoString() {
+		for (int i = ThongTinNo.size(); i > 0; i--) {
+			ThongTinNoString = ThongTinNoString + ThongTinNo.get(i - 1).toString() + "<br>";
 
 		}
 	}

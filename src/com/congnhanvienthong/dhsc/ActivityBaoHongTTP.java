@@ -44,6 +44,9 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 		txtNoiDungHong = (EditText) body.findViewById(R.id.inputnd_hong);
 		txtLienHe = (EditText) body.findViewById(R.id.inputLienHe);
 		txtTenLienHe = (EditText) body.findViewById(R.id.input_tenlienhe);
+		if (Util.ttp.getId_ttpho().equals("1")) {
+			txtAcc.setVisibility(View.GONE);
+		}
 		bttOK = (Button) foot.findViewById(R.id.bttOK);
 		bttOK.setOnClickListener(this);
 		spnLoaiDichVu = (Spinner) body.findViewById(R.id.spn_loaidv);
@@ -60,8 +63,8 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 				// TODO Auto-generated method stub
 				ldv = (LoaiDichVu) arg0.getAdapter().getItem(arg2);
 				getNoiDungBaoHongTask = new GetNoiDungBaoHongTask();
-				getNoiDungBaoHongTask.input.add(ldv.getIdLoaiDichvu());
-				getNoiDungBaoHongTask.input.add(Util.userName);
+				getNoiDungBaoHongTask.addParam("dichVuId", ldv.getIdLoaiDichvu());
+				getNoiDungBaoHongTask.addParam("userName", Util.userName);
 				onExecuteToServer(true, null, getNoiDungBaoHongTask);
 
 			}
@@ -88,6 +91,7 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 			try {
 				SoapObject temp = (SoapObject) nhanBaoHongTTPTask.result;
 				String res = Util.GetData(temp, context, String.class, "IsError", "Message", "Result");
+				Util.showAlert(context, res);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -136,18 +140,26 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 			ndBaoHong = (NoiDungHong) spnNoiDungHong.getSelectedItem();
 			if (Validate()) {
 				nhanBaoHongTTPTask = new NhanBaoHongTTPTask();
-				nhanBaoHongTTPTask.input.add(ldv.getIdLoaiDichvu());
-				nhanBaoHongTTPTask.input.add(txtMaDichVu.getText().toString());
-				nhanBaoHongTTPTask.input.add(txtAcc.getText().toString());
-				nhanBaoHongTTPTask.input.add(false);
-				nhanBaoHongTTPTask.input.add(ndBaoHong.getIdNoiDungBaoHong());
-				nhanBaoHongTTPTask.input.add(ndBaoHong.getTenNoiDungBaoHong() + txtNoiDungHong.getText().toString());
-				nhanBaoHongTTPTask.input.add("");
-				nhanBaoHongTTPTask.input.add(txtLienHe.getText().toString());
-				nhanBaoHongTTPTask.input.add(txtLienHe.getText().toString());
-				nhanBaoHongTTPTask.input.add(txtTenLienHe.getText().toString());
-				nhanBaoHongTTPTask.input.add(Util.userName);
-				nhanBaoHongTTPTask.input.add(Util.ttp.getId_ttpho());
+				nhanBaoHongTTPTask.addParam("loaiDichVuId", ldv.getIdLoaiDichvu());
+				nhanBaoHongTTPTask.addParam("maDichVu", txtMaDichVu.getText().toString());
+				nhanBaoHongTTPTask.addParam("tenAccount", txtAcc.getText().toString());
+				nhanBaoHongTTPTask.addParam("khan", false);
+				nhanBaoHongTTPTask.addParam("noiDungBaoHongId", ndBaoHong.getIdNoiDungBaoHong());
+				nhanBaoHongTTPTask.addParam("noiDungBaoHong",
+						ndBaoHong.getTenNoiDungBaoHong() + txtNoiDungHong.getText().toString());
+				nhanBaoHongTTPTask.addParam("gioHen", "");
+				nhanBaoHongTTPTask.addParam("dienThoaiLienHe", txtLienHe.getText().toString());
+				nhanBaoHongTTPTask.addParam("diDongLienHe", txtLienHe.getText().toString());
+				nhanBaoHongTTPTask.addParam("nguoiLienHe", txtTenLienHe.getText().toString());
+				nhanBaoHongTTPTask.addParam("userName", Util.userName);
+				nhanBaoHongTTPTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
+				if (Util.ttp.getId_ttpho().equals("1")) {
+					txtAcc.setVisibility(View.GONE);
+					nhanBaoHongTTPTask.removeParam("tinhThanhPhoId");
+					nhanBaoHongTTPTask.removeParam("tenAccount");
+					nhanBaoHongTTPTask.addParam("isBaoHongAo", true);
+					nhanBaoHongTTPTask.addParam("loaiKhachHangId", "0");
+				}
 				onExecuteToServer(true, "Xác nhận báo hỏng!", nhanBaoHongTTPTask);
 			}
 

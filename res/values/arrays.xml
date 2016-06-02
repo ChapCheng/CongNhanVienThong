@@ -8,7 +8,7 @@
         <item>400</item>
         <item>500</item>
     </string-array>
-     <string-array name="loai_mang">
+    <string-array name="loai_mang">
         <item>Cáp quang</item>
         <item>Cáp đồng</item>
     </string-array>
@@ -37,9 +37,10 @@
         <item>Theo số điện thoại</item>
     </string-array>
     <string-array name="cac_kieu_do">
-        <item>Đo trạng thái BRAS</item>
-        <item>Theo trạng thái DSLAM</item>
-        <item>Theo trạng thái MEN-GPON</item>
+        <item>Đo trạng thái DSLAM</item>
+        <item>Đo trạng thái cổng MEN</item>
+        <item>Kiểm tra trạng thái Bras</item>
+        <item>Đo thông số GPON</item>
     </string-array>
     <string-array name="loai_ket_cuoi">
         <item>Tổng đài</item>
@@ -70,6 +71,11 @@
         <item>MyTV</item>
         <item>MegaVNN</item>
         <item>MegaWan</item>
+    </string-array>
+    <string-array name="loai_doi_tuong">
+        <item>Khu Vực Tòa nhà</item>
+        <item>Nhà Trạm Viễn Thông</item>
+        <item>Đối tượng quản lý mạng cáp</item>
     </string-array>
 
 </resources>

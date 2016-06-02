@@ -53,7 +53,7 @@ public class ActivityTraCuuQLKN extends ActivityBaseToDisplay {
 				// TODO Auto-generated method stub
 				Task task = new Task();
 				getTraCuuKhieuNai = new GetTraCuuKhieuNaiTask();
-				getTraCuuKhieuNai.input.add(maTraCuu.getText().toString().trim());
+				getTraCuuKhieuNai.addParam("socv", maTraCuu.getText().toString().trim());
 				task.execute(getTraCuuKhieuNai);
 			}
 		});

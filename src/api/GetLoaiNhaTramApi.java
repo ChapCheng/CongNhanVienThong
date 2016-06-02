@@ -11,7 +11,7 @@ public class GetLoaiNhaTramApi extends ApiTask {
 	public GetLoaiNhaTramApi() {
 		// TODO Auto-generated constructor stub
 		super();
-		this.url = "http://10.10.20.106/qlntapi/api/Mobi/GetLoaiNhaTramApi";
+		this.url = "http://123.16.191.37/qlntapi/api/Mobi/GetLoaiNhaTramApi";
 		this.addParam("userName", "PM1");
 		this.addParam("passWord", "@PM1_VNPT@");
 		this.addParam("maTinhThanh", "HNI");
@@ -22,7 +22,7 @@ public class GetLoaiNhaTramApi extends ApiTask {
 		// TODO Auto-generated method stub
 		LoaiNhaTram = new ListApiResult<LoaiNhaTram>();
 		Gson gson = new Gson();
-		
+
 		return getList(LoaiNhaTram.class);
 	}
 

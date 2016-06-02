@@ -21,10 +21,10 @@ public class TraCuuChungTask extends BaseTask {
 		Pass_WS = "cskh_360";
 		pUserLabel = "Username";
 		pPassLabel = "Password";
-		para.add("SearchText");
-		para.add("SearchOption");
-		para.add("SearchOrder");
-		para.add("TinhTP_ID");
+		// para.add("SearchText");
+		// para.add("SearchOption");
+		// para.add("SearchOrder");
+		// para.add("TinhTP_ID");
 	}
 
 	@Override

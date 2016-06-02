@@ -17,6 +17,7 @@ import org.ksoap2.serialization.SoapObject;
 
 import view.appmenu.EntryItem;
 import view.appmenu.Item;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -59,6 +60,7 @@ import congnhanvienthong.entity.dhsc.LoaiDo;
 import congnhanvienthong.entity.dhsc.NhanVien;
 import congnhanvienthong.entity.dhsc.TinhThanhPho;
 
+@SuppressLint("DefaultLocale")
 public class Util {
 	// public static List<NghiepVu> listNghiepVu;
 	public static List<LoaiDichVu> listLoaiDichVu;
@@ -285,7 +287,7 @@ public class Util {
 					}
 
 				} else {
-					field.set(object, null);
+					// field.set(object, null);
 				}
 
 			}
@@ -514,6 +516,43 @@ public class Util {
 		}
 	}
 
+	public static <T> void setTextFromObjectAllField(TextView textView, T obj) {
+		Field fieldArr[] = obj.getClass().getDeclaredFields();
+		String hienThi = "";
+		for (Field field : fieldArr) {
+			if (field != null) {
+				field.setAccessible(true);
+				AnnotationField annotationField = field.getAnnotation(AnnotationField.class);
+				try {
+					if (annotationField != null && field.get(obj) != null) {
+						if (field.get(obj).getClass().isArray()) {
+							Object[] objects = (Object[]) field.get(obj);
+							hienThi = hienThi + "<b>" + annotationField.tenNhan() + "</b>" + ": <br>";
+							for (int i = 0; i < objects.length; i++) {
+
+								hienThi = hienThi + objects[i].toString() + "<br>";
+							}
+
+						} else {
+							hienThi = hienThi + "<b>" + annotationField.tenNhan() + "</b>" + ": ";
+							hienThi = hienThi + field.get(obj).toString() + "<br>";
+						}
+
+					}
+
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			Spanned sp = Html.fromHtml(hienThi.toString());
+			textView.setText(sp);
+		}
+	}
+
 	public static String removeAccent(String s) {
 
 		String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
@@ -551,7 +590,6 @@ public class Util {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> ArrayList<T> SetDataToSpinner(Context context, Spinner spn, ArrayList<T> lst, String nameField) {
 
 		try {
@@ -590,6 +628,7 @@ public class Util {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T GetData(SoapObject input, Context context, Class<T> clazz, String err, String mes, String res) {
 		try {
 			String erros = input.getPrimitivePropertyAsString(err);

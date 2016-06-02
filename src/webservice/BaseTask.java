@@ -1,7 +1,9 @@
 package webservice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;
@@ -20,8 +22,6 @@ public class BaseTask implements WebProtocol {
 	public String METHOD_NAME;
 	public String SOAP_ACTION;
 	public String NAMESPACE;
-	public ArrayList<Object> input;
-	public ArrayList<String> para;
 	public String headerTitle;
 	public String User_WS;
 	public String Pass_WS;
@@ -36,25 +36,30 @@ public class BaseTask implements WebProtocol {
 	public Object result;
 	public String mess;
 	public String erros;
+	protected Map<String, Object> lstParameter;
 
-	// public ArrayList<String> paraObj;
+	public void addParam(String param, Object value) {
+		lstParameter.put(param, value);
+	}
+
+	public void removeParam(String param) {
+		lstParameter.remove(param);
+	}
 
 	@SuppressWarnings("rawtypes")
 	public BaseTask() {
 		// TODO Auto-generated constructor stub
 		SOAP_ACTION = NAMESPACE + METHOD_NAME;
 		NAMESPACE = "http://tempuri.org/";
-		input = new ArrayList<Object>();
-		para = new ArrayList<String>();
 		paraObj = new ArrayList<String>();
 		paraObjType = new ArrayList<Class>();
-		// paraObj = new ArrayList<String>();
 		headerTitle = "headerTitle";
 		User_WS = "User_WS";
 		Pass_WS = "Pass_WS";
 
 		pUserLabel = "Username";
 		pPassLabel = "Password";
+		lstParameter = new HashMap<String, Object>();
 	}
 
 	public Object getResult() {
@@ -88,17 +93,14 @@ public class BaseTask implements WebProtocol {
 		MarshalDouble marshaldDouble = new MarshalDouble();
 		marshaldDouble.register(envelope);
 		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
-		if (para.size() > 0) {
-
-			for (int i = 0; i < para.size(); i++) {
-				PropertyInfo pInfo = new PropertyInfo();
-				pInfo.setName(para.get(i));
-				pInfo.setValue(input.get(i));
-				pInfo.setType(input.get(i).getClass());
-				request.addProperty(pInfo);
-			}
+		for (Map.Entry<String, Object> entry : lstParameter.entrySet()) {
+			PropertyInfo pInfo = new PropertyInfo();
+			pInfo.setName(entry.getKey());
+			pInfo.setValue(entry.getValue());
+			pInfo.setType(entry.getValue().getClass());
+			request.addProperty(pInfo);
 		}
+
 		int len = paraObj.size();
 		if (len > 0) {
 			for (int w = 0; w < len; w++) {
@@ -128,6 +130,13 @@ public class BaseTask implements WebProtocol {
 			result = e;
 		}
 
+	}
+
+	@Override
+	public Void SetConText(Context context) {
+		// TODO Auto-generated method stub
+		this.context = context;
+		return null;
 	}
 
 }

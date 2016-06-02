@@ -76,10 +76,12 @@ public class ActivityChonTinhThanhPho extends ActivityBaseToDisplay {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				layListDichVuTask = new LayListDichVuTask();
-				layListDichVuTask.para.add("id_ttpho");
-				layListDichVuTask.input.add(Util.ttp.getId_ttpho());
-				layListDichVuTask.para.add("error");
-				layListDichVuTask.input.add("1");
+				// layListDichVuTask.para.add("id_ttpho");
+				// layListDichVuTask.input.add(Util.ttp.getId_ttpho());
+				// layListDichVuTask.para.add("error");
+				// layListDichVuTask.input.add("1");
+				layListDichVuTask.addParam("id_ttpho", Util.ttp.getId_ttpho());
+				layListDichVuTask.addParam("error", 1);
 				Task task = new Task();
 				task.execute(layListDichVuTask);
 

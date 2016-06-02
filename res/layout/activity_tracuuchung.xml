@@ -21,7 +21,7 @@
                 android:id="@+id/lblNhap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nhập thông tin mã dịch vụ"
+                android:text="Nhập thông tin tìm kiếm"
                 android:textColor="@color/black" />
 
             <EditText
@@ -50,8 +50,6 @@
                 android:id="@+id/spnsapxep"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
-
-            <include layout="@layout/listview_header_fillter" />
         </LinearLayout>
     </ScrollView>
 

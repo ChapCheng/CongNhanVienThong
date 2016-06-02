@@ -21,7 +21,7 @@ public class ActivityLyLichMay extends ActivityBaseToDisplay {
 
 	TextView txtResult, txtMaTraCuu;
 	Button bttTraCuu;
-	LyLichMayTask doDSLAMTask;
+	LyLichMayTask traLyLichMayTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class ActivityLyLichMay extends ActivityBaseToDisplay {
 		// TODO Auto-generated method stub
 		super.onsucces(task);
 		try {
-			SoapObject arrString = (SoapObject) doDSLAMTask.result;
+			SoapObject arrString = (SoapObject) traLyLichMayTask.result;
 			String result = arrString.getPrimitivePropertyAsString("isError");
 			String mess = arrString.getPrimitivePropertyAsString("Message");
 			if (result.toLowerCase().equals("true")) {
@@ -72,10 +72,10 @@ public class ActivityLyLichMay extends ActivityBaseToDisplay {
 		switch (v.getId()) {
 		case R.id.bttOK:
 			txtResult.setText("");
-			doDSLAMTask = new LyLichMayTask();
-			doDSLAMTask.input.add(txtMaTraCuu.getText().toString());
-			doDSLAMTask.input.add(Util.ttp.getMa_Ttp());
-			onExecuteToServer(true, null, doDSLAMTask);
+			traLyLichMayTask = new LyLichMayTask();
+			traLyLichMayTask.addParam("ma_dich_vu", txtMaTraCuu.getText().toString());
+			traLyLichMayTask.addParam("ma_tinh_thanh", Util.ttp.getMa_Ttp());
+			onExecuteToServer(true, null, traLyLichMayTask);
 			break;
 		}
 	}

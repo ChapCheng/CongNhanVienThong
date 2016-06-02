@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.congnhanvienthong"
-    android:versionCode="18"
-    android:versionName="1.7" >
+    android:versionCode="21"
+    android:versionName="1.9" >
 
     <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="21" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="10" />
 
     <permission
         android:name="com.congnhanvienthong.permission.MAPS_RECEIVE"
@@ -127,6 +127,8 @@
         </activity>
         <activity android:name="com.congnhanvienthong.qlnt.ActivityTraCuuNhaTram" >
         </activity>
+        <activity android:name="com.congnhanvienthong.vitri.ActivityQuetDoiTuongTheoBanKinh" >
+        </activity>
         <activity
             android:name="com.congnhanvienthong.pttb.ActivityTraCuuToaNha"
             android:windowSoftInputMode="stateVisible" >
@@ -144,6 +146,10 @@
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity android:name="com.congnhanvienthong.pttb.ActivityCheckUserCsonline" >
+        </activity>
+        <activity android:name="com.congnhanvienthong.kdb.ActivityKhoanDiaBan" >
+        </activity>
+        <activity android:name="com.congnhanvienthong.qlnt.CapNhatToaDo" >
         </activity>
 
         <meta-data

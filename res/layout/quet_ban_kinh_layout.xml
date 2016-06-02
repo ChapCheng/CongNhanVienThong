@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loại đối tượng" />
+
+    <Spinner
+        android:id="@+id/spnLoaiDoiTuong"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/loai_doi_tuong" />
+
+    <LinearLayout
+        android:id="@+id/viewGtcas"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loại kết cuối" />
+
+        <Spinner
+            android:id="@+id/spnLoaiKetcuoi"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/loai_ket_cuoi" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên Kết cuối" />
+
+        <EditText
+            android:id="@+id/edtName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tên kết cuối" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Khoảng cách tìm kiếm" />
+
+    <Spinner
+        android:id="@+id/spnKhoangCach"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/khoang_cach" />
+
+</LinearLayout>

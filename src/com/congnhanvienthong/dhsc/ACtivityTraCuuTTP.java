@@ -1,16 +1,17 @@
 package com.congnhanvienthong.dhsc;
 
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.concurrent.TimeoutException;
 
-import org.ksoap2.serialization.SoapObject;
+import com.congnhanvienthong.ActivityBaseToDisplay;
+import com.congnhanvienthong.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import view.YourMapFragment;
-import webservice.BaseTask;
-import webservice.GetViTriTask;
-import webservice.WebProtocol;
-import webservice.dhsc.TraCuuTTPTask;
 import adapter.BaseSpinnerAdapter;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -20,19 +21,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.congnhanvienthong.ActivityBaseToDisplay;
-import com.congnhanvienthong.R;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-
 import congnhanvienthong.entity.dhsc.LoaiDichVu;
 import control.Util;
+import view.YourMapFragment;
+import webservice.GetViTriTask;
+import webservice.WebProtocol;
+import webservice.dhsc.TraCuuTTPTask;
 
 public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 	Spinner spnLoaiDichVu, spnNoiDungHong;
@@ -43,6 +40,7 @@ public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 	TextView ketquaText;
 	EditText txtInput;
 	private GoogleMap map;
+	ScrollView mScrollView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +48,9 @@ public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 		super.onCreate(savedInstanceState);
 		setBodyLayout(R.layout.activity_tracuu_ttp);
 		setHeader("Tra Cứu");
-		map = ((YourMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapo)).getMap();
+		final YourMapFragment fragment = (YourMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapo);
+		mScrollView = (ScrollView) body.findViewById(R.id.scroll_main);
+		map = fragment.getMap();
 
 		map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
 
@@ -66,6 +66,8 @@ public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 				map.getUiSettings().setAllGesturesEnabled(true);
 				map.setTrafficEnabled(true);
 				map.getUiSettings().setTiltGesturesEnabled(true);
+				// Util.setListViewHeightBasedOnChildren(listView);
+
 				map.setMyLocationEnabled(true);
 				try {
 					WifiManager wiff;
@@ -80,6 +82,12 @@ public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 			}
 		});
 		// map.moveCamera(CameraUpdateFactory.);
+		fragment.setListener(new YourMapFragment.OnTouchListener() {
+			@Override
+			public void onTouch() {
+				mScrollView.requestDisallowInterceptTouchEvent(true);
+			}
+		});
 		context = ACtivityTraCuuTTP.this;
 		spnLoaiDichVu = (Spinner) body.findViewById(R.id.loaiDichVu);
 		setFootLayout(R.layout.foot_tracuu);
@@ -111,21 +119,23 @@ public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				traCuuTTPTask = new TraCuuTTPTask();
-				traCuuTTPTask.input.add(txtInput.getText().toString());
-				traCuuTTPTask.input.add(loaiDVu.getIdLoaiDichvu());
-				traCuuTTPTask.input.add(Util.userName);
-				traCuuTTPTask.input.add(Util.ttp.getId_ttpho());
-				traCuuTTPTask.input.add("1");
+				traCuuTTPTask.addParam("maDichVu", txtInput.getText().toString());
+				traCuuTTPTask.addParam("loaiDichVuId", loaiDVu.getIdLoaiDichvu());
+				traCuuTTPTask.addParam("userName", Util.userName);
+				traCuuTTPTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
+				if (Util.ttp.getId_ttpho().equals("1")) {
+					traCuuTTPTask.removeParam("userName");
+					traCuuTTPTask.removeParam("tinhThanhPhoId");
+				}
 				getvitriTask = new GetViTriTask();
-				getvitriTask.input.add(txtInput.getText().toString());
-				getvitriTask.input.add(2);
+				getvitriTask.addParam("ma_dichvu", txtInput.getText().toString());
+				getvitriTask.addParam("id_hethong", 2);
 				onExecuteToServer(true, "Tra cứu thông tin ?", traCuuTTPTask, getvitriTask);
 			}
 		});
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onsucces(WebProtocol task) {
 		// TODO Auto-generated method stub
@@ -133,18 +143,17 @@ public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 		if (task.equals(traCuuTTPTask)) {
 			ketquaText.setText("");
 			try {
-				Vector<Object> temp = (Vector<Object>) traCuuTTPTask.result;
-				SoapObject soapObjThongTinDichVu = (SoapObject) temp.get(0);
-				if (soapObjThongTinDichVu.hasProperty("ThongTinDichVu")) {
-					soapObjThongTinDichVu = (SoapObject) soapObjThongTinDichVu.getProperty("ThongTinDichVu");
-					ketquaText.setText(
-							Util.GetInformation(soapObjThongTinDichVu, context, R.array.tag_name_thongtindichvu_dhsc));
-				} else {
-					ketquaText.setText("Không tìm thấy thông tin");
+				Util.setTextFromObject(ketquaText, traCuuTTPTask.getResult());
+				MarkerOptions makerSearch;
+				makerSearch = new MarkerOptions().draggable(true);
+				LatLng lat = (LatLng) getvitriTask.getResult();
+				if (lat != null) {
+					makerSearch.position(lat);
+					BitmapDescriptor ketcuoiIcon = BitmapDescriptorFactory.fromResource(R.drawable.my_location);
+					makerSearch.icon(ketcuoiIcon);
+					makerSearch.anchor(0.5f, 1.0f);
+					map.addMarker(makerSearch);
 				}
-
-				Object vitri = getvitriTask.result;
-				System.out.println(vitri);
 			} catch (Exception e) {
 				// TODO: handle exception
 				if (e instanceof TimeoutException) {
@@ -161,6 +170,5 @@ public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		// super.onBackPressed();
 	}
 }

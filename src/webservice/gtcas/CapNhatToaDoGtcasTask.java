@@ -15,11 +15,11 @@ public class CapNhatToaDoGtcasTask extends BaseTask {
 		headerTitle = "AuthHeader";
 		pUserLabel = "Username";
 		pPassLabel = "Password";
-		para.add("MaTinhThanh");
-		para.add("ObjectId");
-		para.add("Long");
-		para.add("Lat");
-		para.add("UserName");
+		// para.add("MaTinhThanh");
+		// para.add("ObjectId");
+		// para.add("Long");
+		// para.add("Lat");
+		// para.add("UserName");
 
 	}
 

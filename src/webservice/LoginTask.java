@@ -10,8 +10,6 @@ public class LoginTask extends BaseTask {
 		User_WS = "WSGWDVKH";
 		Pass_WS = "Authentication";
 		headerTitle = "AuthHeader";
-		para.add("strUsername");
-		para.add("strPassword");
 
 	}
 

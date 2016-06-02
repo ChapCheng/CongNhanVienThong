@@ -50,7 +50,7 @@ public class ActivityDuyetPhieuXacMinhKhieuNai extends ActivityBaseToDisplay {
 		setHeader("Lãnh đạo duyệt phiếu xác minh");
 		Task task = new Task();
 		getTienTrinhPhieu = new GetTienTrinhPhieuXacMinhKhieuNaiWS();
-		getTienTrinhPhieu.input.add(soPhieu);
+		getTienTrinhPhieu.addParam("p_sophieu", soPhieu);
 		task.execute(getTienTrinhPhieu);
 	}
 
@@ -91,7 +91,7 @@ public class ActivityDuyetPhieuXacMinhKhieuNai extends ActivityBaseToDisplay {
 					metrics, false));
 			Task task2 = new Task();
 			getNghiepVuXuat = new GetNghiepVuXuatXacMinhKhieuNaiWS();
-			getNghiepVuXuat.input.add(soPhieu);
+			getNghiepVuXuat.addParam("p_sophieu", soPhieu);
 			task2.execute(getNghiepVuXuat);
 
 		}

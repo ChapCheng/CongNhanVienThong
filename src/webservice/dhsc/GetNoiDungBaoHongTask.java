@@ -15,12 +15,15 @@ public class GetNoiDungBaoHongTask extends BaseTask {
 		SOAP_ACTION = "http://tempuri.org/WsGetNoiDungBaoHong";
 		METHOD_NAME = "WsGetNoiDungBaoHong";
 		NAMESPACE = "http://tempuri.org/";
-		WSDL = "http://123.16.191.37/WebServiceDHSC/dhsc.asmx?WSDL";
 		User_WS = "wscskh";
 		Pass_WS = "wscskh@456";
-		headerTitle = "AuthHeaderDhsc";
-		para.add("dichVuId");
-		para.add("userName");
+		if (Util.ttp.getId_ttpho().equals("1")) {
+			headerTitle = "AuthHeaderDhsc";
+			WSDL = "http://123.16.191.37/WebServiceDHSC/dhsc.asmx?WSDL";
+		} else {
+			headerTitle = "AuthHeaderDhscTtp";
+			WSDL = "http://123.16.191.37/WebServiceDHSC/dhscttp.asmx";
+		}
 	}
 
 	@Override

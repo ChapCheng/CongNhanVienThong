@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.ksoap2.serialization.SoapObject;
 
 import congnhanvienthong.entity.dhsc.LoaiNghiemThu;
-import congnhanvienthong.entity.dhsc.LyDoTon;
 import control.Util;
 import webservice.BaseTask;
 
@@ -20,8 +19,8 @@ public class GetLoaiNghiemThuTask extends BaseTask {
 		User_WS = "wscskh";
 		Pass_WS = "wscskh@456";
 		headerTitle = "AuthHeaderDhscTtp";
-		para.add("loaiDichVuId");
-		para.add("tinhThanhPhoId");
+		// para.add("loaiDichVuId");
+		// para.add("tinhThanhPhoId");
 	}
 
 	@Override

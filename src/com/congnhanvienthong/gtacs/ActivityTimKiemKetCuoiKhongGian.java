@@ -50,7 +50,6 @@ import congnhanvienthong.entity.dhsc.Device;
 import congnhanvienthong.entity.gtacs.KetCuoi;
 import congnhanvienthong.entity.gtacs.LoaiDoiTuong;
 import control.Util;
-import webservice.BaseTask;
 import webservice.WebProtocol;
 import webservice.gtcas.GetRankTask;
 
@@ -423,19 +422,15 @@ public class ActivityTimKiemKetCuoiKhongGian extends ActivityBaseToDisplay {
 			break;
 
 		case R.id.bttOK:
-			// thongTinTimKiemKetCuoi
-			// myLocation = ;
 			if (makerSearch != null) {
 				getRankTask = new GetRankTask();
-				getRankTask.input.add(makerSearch.getPosition().longitude);
-				getRankTask.input.add(makerSearch.getPosition().latitude);
-				getRankTask.input.add(khoangCach);
-				getRankTask.input.add(30);
-				getRankTask.input.add(maDoiTuong);
-				getRankTask.input.add(txtName.getText().toString());
-				getRankTask.input.add(Util.ttp.getId_ttpho());
-				// Task task = new Task();
-				// task.execute(getRankTask);
+				getRankTask.addParam("p_Longitude", makerSearch.getPosition().longitude);
+				getRankTask.addParam("p_Latitude", makerSearch.getPosition().latitude);
+				getRankTask.addParam("p_MaxRange", khoangCach);
+				getRankTask.addParam("p_Count", 30);
+				getRankTask.addParam("p_Type", maDoiTuong);
+				getRankTask.addParam("p_ObjName", txtName.getText().toString());
+				getRankTask.addParam("id_Tinhthanh", Util.ttp.getId_ttpho());
 				onExecuteToServer(true, "Tìm kiếm trên bản đổ ? ", getRankTask);
 			} else {
 				Toast.makeText(context, "Chưa xác định vị trí cần tìm kiếm", Toast.LENGTH_SHORT).show();

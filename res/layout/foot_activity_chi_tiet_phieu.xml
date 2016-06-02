@@ -19,6 +19,16 @@
             android:text="Chụp ảnh" />
 
         <Button
+            android:id="@+id/bttTraPhieu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_3d"
+            android:text="Trả phiếu"
+            android:visibility="gone" />
+
+        <Button
             android:id="@+id/phieuton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -37,15 +47,6 @@
             android:layout_weight="1"
             android:background="@drawable/button_3d"
             android:text="@string/khoa" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="1dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_3d"
-            android:text="@string/bao"
-            android:visibility="gone" />
     </LinearLayout>
 
 </RelativeLayout>

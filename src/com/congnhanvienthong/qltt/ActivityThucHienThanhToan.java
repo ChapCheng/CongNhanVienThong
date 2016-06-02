@@ -1,14 +1,17 @@
 package com.congnhanvienthong.qltt;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
-import webservice.qltt.PaymentsWebServices;
+import com.congnhanvienthong.ActivityBaseToDisplay;
+import com.congnhanvienthong.R;
+import com.google.gson.Gson;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -26,18 +29,15 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
-import com.congnhanvienthong.ActivityBaseToDisplay;
-import com.congnhanvienthong.R;
-import com.google.gson.Gson;
-
 import congnhanvienthong.entity.qltt.CustomerInfomation;
 import congnhanvienthong.entity.qltt.DebtInfomation;
 import congnhanvienthong.entity.qltt.ResultPayment;
 import control.Util;
+import webservice.WebProtocol;
+import webservice.qltt.PaymentsWebServices;
+import webservice.qltt.TraThongTinThanhToanWS;
 
-public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
-		AsyncResponse {
+public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements AsyncResponse {
 
 	private Button btnThanhToan;
 	private TextView tvTenThanhToan;
@@ -52,6 +52,7 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 	private TextView tvTienThanhToan;
 	private EditText edtTienThanhToan;
+	TraThongTinThanhToanWS tratt;
 
 	CustomerInfomation customerInfo;
 
@@ -61,23 +62,32 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 		setHeader("Thanh toán");
 		setBodyLayout(R.layout.activity_thanhtoan_gach_no);
 
-		initialize();
+		initialize(null);
 	}
 
-	private void initialize() {
+	private void initialize(String custom) {
 
 		Bundle bundle = getIntent().getExtras();
 
-		if (bundle != null) {
+		if (custom == null) {
+			if (bundle != null) {
 
-			String customerJson = bundle.getString("customer_info");
+				String customerJson = bundle.getString("customer_info");
 
-			customerInfo = new Gson().fromJson(customerJson,
-					CustomerInfomation.class);
+				customerInfo = new Gson().fromJson(customerJson, CustomerInfomation.class);
+			}
 		}
+		if (custom != null) {
+
+			String customerJson = custom;
+
+			customerInfo = new Gson().fromJson(customerJson, CustomerInfomation.class);
+		}
+		if (customerInfo == null)
+			return;
 
 		tblThongTinNo = (TableLayout) this.findViewById(R.id.tblThongTinNo);
-
+		tblThongTinNo.removeAllViews();
 		btnThanhToan = (Button) this.findViewById(R.id.btnGachNo);
 
 		tvTenThanhToan = (TextView) this.findViewById(R.id.tvTenThanhToan);
@@ -94,21 +104,16 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 		//
 		// Set value from Customer Info
 		//
-		tvTenThanhToan.setText("Tên khách hàng : "
-				+ customerInfo.getTenThanhToan());
+		tvTenThanhToan.setText("Tên khách hàng : " + customerInfo.getTenThanhToan());
 
 		tvDiaChi.setText("Địa chỉ : " + customerInfo.getDiaChi());
 
 		tvMaThanhToan.setText("Mã thanh toán : ");
 		tvBillingCode.setText(customerInfo.getMaThanhToan());
 
-		final ArrayList<DebtInfomation> listOfDebt = customerInfo
-				.getThongTinNo();
+		final ArrayList<DebtInfomation> listOfDebt = customerInfo.getThongTinNo();
 
-		tvTrangThai
-				.setText("Trạng thái : "
-						+ (listOfDebt.size() > 0 ? "Chưa thanh toán"
-								: "Đã thanh toán"));
+		tvTrangThai.setText("Trạng thái : " + (listOfDebt.size() > 0 ? "Chưa thanh toán" : "Đã thanh toán"));
 
 		/*** Hiển thị thông tin nợ ***/
 
@@ -116,8 +121,7 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 		// Khai báo biến lấy tổng tiền
 		BigDecimal totalBill = new BigDecimal(0);
 
-		DecimalFormat formatter = (DecimalFormat) NumberFormat
-				.getInstance(Locale.GERMAN);
+		DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.GERMAN);
 
 		if (listOfDebt.size() > 0) {
 
@@ -180,8 +184,7 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 				TextView tvSoTien = new TextView(this);
 
-				BigDecimal amountOfMoney = new BigDecimal(listOfDebt.get(i)
-						.getSoTien());
+				BigDecimal amountOfMoney = new BigDecimal(listOfDebt.get(i).getSoTien());
 
 				tvSoTien.setText(formatter.format(amountOfMoney).toString());
 				tvSoTien.setWidth(300);
@@ -216,18 +219,6 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 			tvKyCuoc.setText("");
 			tvKyCuoc.setWidth(150);
 			totalRow.addView(tvKyCuoc);
-			//
-			// Tổngtiền
-			//
-			/*
-			 * TextView tvTongTien = new TextView(activity);
-			 * tvTongTien.setText(totalBill + ""); tvTongTien.setWidth(300);
-			 * tvTongTien.setGravity(Gravity.RIGHT);
-			 * totalRow.addView(tvTongTien); tblThongTinNo.addView(totalRow);
-			 */
-			//
-			// Điền tổng tiền vào text tiền thanh toán
-			//
 		}
 
 		tvTienThanhToan.setVisibility(View.VISIBLE);
@@ -241,12 +232,23 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 			@Override
 			public void onClick(View v) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				alert.setTitle("Thông báo!");
+				alert.setMessage("Xác nhận thanh toán? ");
+				alert.setNegativeButton("Quay lại", null);
+				alert.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
 
-				GachNo();
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						GachNo();
+					}
+				});
+				alert.show();
+
 			}
 		});
-		edtTienThanhToan.addTextChangedListener(new NumberTextWatcher(
-				edtTienThanhToan));
+		edtTienThanhToan.addTextChangedListener(new NumberTextWatcher(edtTienThanhToan));
 	}
 
 	@Override
@@ -265,41 +267,57 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 			} else {
 
 				/*
-				Toast.makeText(getBaseContext(),
-						"Không kết nối được đến Web Service",
-						Toast.LENGTH_SHORT).show();
-						*/
+				 * Toast.makeText(getBaseContext(),
+				 * "Không kết nối được đến Web Service",
+				 * Toast.LENGTH_SHORT).show();
+				 */
 				Util.showAlert(context, "Không kết nối được đến WS thanh toán");
-				
+
 				return;
 			}
 
 			if (resultPayment.getErrorCode().equals("0")) {
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						ActivityThucHienThanhToan.this);
-				
+				AlertDialog.Builder builder = new AlertDialog.Builder(ActivityThucHienThanhToan.this);
+
 				builder.setTitle("Thông báo");
 				builder.setMessage("Thanh toán thành công");
 				builder.setPositiveButton("Thoát", new DialogInterface.OnClickListener() {
-					
+
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-							
-						onBackPressed();
+
+						// onBackPressed();
+						initialize(null);
+						tratt = new TraThongTinThanhToanWS();
+						tratt.addParam("sThongTinTim", tvBillingCode.getText().toString());
+						tratt.addParam("sLoaiDV", "CD");
+						tratt.addParam("sUserName", Util.userName);
+
+						SharedPreferences sharedPref = ActivityThucHienThanhToan.this
+								.getSharedPreferences(Constants.FILE_AUTHENTICATION, Context.MODE_PRIVATE);
+
+						String authenticationString = sharedPref.getString(Constants.AUTHENTICATION_KEY, "");
+
+						if (!authenticationString.isEmpty()) {
+							String authenticationMd5 = Utilities
+									.md5(tvBillingCode.getText().toString() + authenticationString);
+							tratt.addParam("sAuthenticationString", authenticationMd5);
+						}
+						onExecuteToServer(true, null, tratt);
+
 					}
 				});
-				
+
 				builder.setCancelable(false);
 				builder.show();
 
 			} else {
 
 				/*
-				Toast.makeText(getBaseContext(),
-						resultPayment.getErrorMessage(), Toast.LENGTH_SHORT)
-						.show();
-				*/
+				 * Toast.makeText(getBaseContext(),
+				 * resultPayment.getErrorMessage(), Toast.LENGTH_SHORT) .show();
+				 */
 				Util.showAlert(context, resultPayment.getErrorMessage());
 
 			}
@@ -318,10 +336,9 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 			if (billingCode.isEmpty()) {
 				/*
-				Toast.makeText(getBaseContext(),
-						"Không tìm thấy mã thanh toán", Toast.LENGTH_SHORT)
-						.show();
-						*/
+				 * Toast.makeText(getBaseContext(),
+				 * "Không tìm thấy mã thanh toán", Toast.LENGTH_SHORT) .show();
+				 */
 				Util.showAlert(context, "Không tìm thấy mã thanh toán");
 				return;
 
@@ -329,10 +346,9 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 			String stringTotal = edtTienThanhToan.getText().toString();
 
-			DecimalFormat formatter = (DecimalFormat) NumberFormat
-					.getInstance(Locale.GERMAN);
-			stringTotal = stringTotal.replace(String.valueOf(formatter
-					.getDecimalFormatSymbols().getGroupingSeparator()), "");
+			DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.GERMAN);
+			stringTotal = stringTotal
+					.replace(String.valueOf(formatter.getDecimalFormatSymbols().getGroupingSeparator()), "");
 			//
 			// Kiểm tra tiền
 			//
@@ -340,10 +356,10 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 			if (amountOfMoney.compareTo(new BigDecimal("99999999999")) == 1) {
 				/*
-				Toast.makeText(getBaseContext(),
-						"Tiền thanh toán không được lớn hơn 99999999999",
-						Toast.LENGTH_SHORT).show();
-						*/
+				 * Toast.makeText(getBaseContext(),
+				 * "Tiền thanh toán không được lớn hơn 99999999999",
+				 * Toast.LENGTH_SHORT).show();
+				 */
 				Util.showAlert(context, "Tiền thanh toán không được lớn hơn 99999999999");
 				return;
 			}
@@ -353,11 +369,9 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 			//
 			// Get Authentication String
 			//
-			SharedPreferences sharedPref = getSharedPreferences(
-					Constants.FILE_AUTHENTICATION, Context.MODE_PRIVATE);
+			SharedPreferences sharedPref = getSharedPreferences(Constants.FILE_AUTHENTICATION, Context.MODE_PRIVATE);
 
-			String authenticationString = sharedPref.getString(
-					Constants.AUTHENTICATION_KEY, "");
+			String authenticationString = sharedPref.getString(Constants.AUTHENTICATION_KEY, "");
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -365,11 +379,9 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 			String transactionDate = dateFormat.format(date).toString();
 
-			String authenticationMd5 = Utilities.md5(billingCode
-					+ transactionDate + authenticationString);
+			String authenticationMd5 = Utilities.md5(billingCode + transactionDate + authenticationString);
 
-			payBillsAsync.execute(billingCode, transactionDate, stringTotal,
-					Util.userName, authenticationMd5);
+			payBillsAsync.execute(billingCode, transactionDate, stringTotal, Util.userName, authenticationMd5);
 
 		} catch (Exception e) {
 			Log.w("Loi roi ", e.toString());
@@ -391,8 +403,7 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 		@Override
 		protected void onPreExecute() {
 
-			progressDialog = ProgressDialog.show(context, "",
-					"Đang thực hiện thanh toán ...");
+			progressDialog = ProgressDialog.show(context, "", "Đang thực hiện thanh toán ...");
 
 		}
 
@@ -411,10 +422,8 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 				PaymentsWebServices paymentsWS = new PaymentsWebServices();
 
-				customerInfo = paymentsWS.payBills(billingCode,
-						transactionDate, amounts, Constants.GATE_WAY,
-						Constants.TRANSACTION_ID, userName,
-						Constants.PAYMENTS_TYPE, Constants.NOTE,
+				customerInfo = paymentsWS.payBills(billingCode, transactionDate, amounts, Constants.GATE_WAY,
+						Constants.TRANSACTION_ID, userName, Constants.PAYMENTS_TYPE, Constants.NOTE,
 						authenticationString);
 			} catch (Exception exc) {
 
@@ -435,6 +444,30 @@ public class ActivityThucHienThanhToan extends ActivityBaseToDisplay implements
 
 				Log.w("Error function onPostExecute", exc);
 			}
+		}
+
+	}
+
+	@Override
+	public void onsucces(WebProtocol task) {
+		// TODO Auto-generated method stub
+		super.onsucces(task);
+		try {
+			String temp = tratt.result.toString();
+			CustomerInfomation[] customers = null;
+			if (temp.length() > 0) {
+
+				customers = new Gson().fromJson(temp, CustomerInfomation[].class);
+			} else {
+				Util.showAlert(context, "Không kết nối được đến WS thanh toán");
+				return;
+			}
+			CustomerInfomation customer = customers[0];
+			String sCustomer = new Gson().toJson(customer);
+			initialize(sCustomer);
+		} catch (Exception e) {
+			// TODO: handle exception
+			onBackPressed();
 		}
 
 	}

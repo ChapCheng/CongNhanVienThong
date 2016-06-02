@@ -11,8 +11,8 @@ public class GetLoaiKetCuoiTask extends BaseTask{
 		METHOD_NAME = "GetObjectTypesByCableNetwork";
 		NAMESPACE = "http://tempuri.org/";
 		WSDL = "http://123.16.191.37/wslink/wsgtcas.asmx?WSDL";
-		para.add("ma_tinh_thanh");
-		para.add("loaiMangCapID");
+		// para.add("ma_tinh_thanh");
+		// para.add("loaiMangCapID");
 		User_WS = "gtcasUser";
 		Pass_WS = "gtcasPassword";
 		headerTitle = "AuthHeader";

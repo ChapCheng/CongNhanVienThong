@@ -1,16 +1,12 @@
 package com.congnhanvienthong.dhsc;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
-import org.ksoap2.serialization.SoapObject;
+import com.congnhanvienthong.ActivityBaseToDisplay;
+import com.congnhanvienthong.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import webservice.BaseTask;
-import webservice.WebProtocol;
-import webservice.dhsc.GetLoaiNghiemThuTask;
-import webservice.dhsc.GetLoaiSuaTask;
-import webservice.dhsc.GetLyDoTonTask;
-import webservice.dhsc.LayListPhieuTTP;
 import adapter.BaseListViewAdapter;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,19 +16,17 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import com.congnhanvienthong.ActivityBaseToDisplay;
-import com.congnhanvienthong.R;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
 import congnhanvienthong.entity.dhsc.LoaiDichVu;
 import congnhanvienthong.entity.dhsc.LoaiNghiemThu;
 import congnhanvienthong.entity.dhsc.LoaiSua;
 import congnhanvienthong.entity.dhsc.LyDoTon;
 import congnhanvienthong.entity.dhsc.ThongTinBaoHong;
 import control.Util;
+import webservice.WebProtocol;
+import webservice.dhsc.GetLoaiNghiemThuTask;
+import webservice.dhsc.GetLoaiSuaTask;
+import webservice.dhsc.GetLyDoTonTask;
+import webservice.dhsc.LayListPhieuTTP;
 
 public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 	LayListPhieuTTP layListPhieuTTP;
@@ -47,7 +41,7 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 	// GetDataPhieuDHSCTask getDataPhieuDHSCTask;
 	ArrayList<LoaiSua> lstLoaiSua = new ArrayList<LoaiSua>();
 	ArrayList<LoaiNghiemThu> lstLoaiNghiemThu = new ArrayList<LoaiNghiemThu>();
-	public static int sophieulay = 10;
+	public static int sophieulay = 25;
 	GetLoaiSuaTask getLoaiSuaTask;
 	GetLoaiNghiemThuTask getLoaiNghiemThuTask;
 	GetLyDoTonTask getLyDoTonTask;
@@ -70,12 +64,17 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 					// TODO Auto-generated method stub
 					Task task = new Task();
 					layListPhieuTTP = new LayListPhieuTTP();
-					layListPhieuTTP.input.add(Util.userName);
-					layListPhieuTTP.input.add(checkedId);
+					layListPhieuTTP.addParam("userName", Util.userName);
+					layListPhieuTTP.addParam("loaiDichVuId", checkedId);
 					type = checkedId;
-					layListPhieuTTP.input.add("0");
-					layListPhieuTTP.input.add(sophieulay);
-					layListPhieuTTP.input.add(Util.ttp.getId_ttpho());
+					layListPhieuTTP.addParam("pStartRowIndex", "0");
+					layListPhieuTTP.addParam("pPageSize", sophieulay);
+					layListPhieuTTP.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
+					if (Util.ttp.getId_ttpho().equals("1")) {
+						layListPhieuTTP.removeParam("tinhThanhPhoId");
+						layListPhieuTTP.addParam("maDichVu", "");
+					}
+
 					while (lstTHThongTinBaoHongs.size() > 0) {
 						lstTHThongTinBaoHongs.remove(0);
 
@@ -85,13 +84,26 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 				}
 			});
 			DisplayRadioButton();
-			layListPhieuTTP = new LayListPhieuTTP();
+			// layListPhieuTTP = new LayListPhieuTTP();
+			// layListPhieuTTP.input.add(Util.userName);
+			// layListPhieuTTP.input.add(type);
+			// layListPhieuTTP.input.add("0");
+			// layListPhieuTTP.input.add(sophieulay);
+			// String value = !Util.ttp.getId_ttpho().equals("1") ?
+			// Util.ttp.getId_ttpho() : "";
+			// layListPhieuTTP.input.add(value);
 
-			layListPhieuTTP.input.add(Util.userName);
-			layListPhieuTTP.input.add(type);
-			layListPhieuTTP.input.add("0");
-			layListPhieuTTP.input.add(sophieulay);
-			layListPhieuTTP.input.add(Util.ttp.getId_ttpho());
+			layListPhieuTTP = new LayListPhieuTTP();
+			layListPhieuTTP.addParam("userName", Util.userName);
+			layListPhieuTTP.addParam("loaiDichVuId", type);
+			layListPhieuTTP.addParam("pStartRowIndex", "0");
+			layListPhieuTTP.addParam("pPageSize", sophieulay);
+			layListPhieuTTP.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
+			if (Util.ttp.getId_ttpho().equals("1")) {
+				layListPhieuTTP.removeParam("tinhThanhPhoId");
+				layListPhieuTTP.addParam("maDichVu", "");
+			}
+
 			setHeader("Khoá phiếu");
 			Task task = new Task();
 			task.execute(layListPhieuTTP);
@@ -119,7 +131,7 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 			}
 			listView = (PullToRefreshListView) body.findViewById(R.id.list_nhan_khoa_phieu);
 			totalInfor = (TextView) body.findViewById(R.id.so_phieu_hong);
-			listView.setMode(Mode.BOTH);
+			// listView.setMode(Mode.BOTH);
 			listView.onRefreshComplete();
 			listView.setAdapter(new BaseListViewAdapter<ThongTinBaoHong>(context, lstTHThongTinBaoHongs, null, false));
 			totalInfor.setText("Có tổng số " + total + " phiếu. ");
@@ -138,11 +150,16 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 						index = index - sophieulay;
 					// refreshView.setShowViewWhileRefreshing(false);
 					layListPhieuTTP = new LayListPhieuTTP();
-					layListPhieuTTP.input.add(Util.userName);
-					layListPhieuTTP.input.add(type);
-					layListPhieuTTP.input.add(index);
-					layListPhieuTTP.input.add(sophieulay);
-					layListPhieuTTP.input.add(Util.ttp.getId_ttpho());
+					layListPhieuTTP = new LayListPhieuTTP();
+					layListPhieuTTP.addParam("userName", Util.userName);
+					layListPhieuTTP.addParam("loaiDichVuId", type);
+					layListPhieuTTP.addParam("pStartRowIndex", 0);
+					layListPhieuTTP.addParam("pPageSize", sophieulay);
+					layListPhieuTTP.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
+					if (Util.ttp.getId_ttpho().equals("1")) {
+						layListPhieuTTP.removeParam("tinhThanhPhoId");
+						layListPhieuTTP.addParam("maDichVu", "");
+					}
 					onExecuteToServer(false, null, layListPhieuTTP);
 
 				}
@@ -156,18 +173,18 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 					// bundle.put
 					Task task = new Task();
 					getLoaiSuaTask = new GetLoaiSuaTask();
-					getLoaiSuaTask.input.add(thongTinBaoHong.getID_LoaiDichVu());
-					getLoaiSuaTask.input.add(thongTinBaoHong.getID_NhomSua());
-					getLoaiSuaTask.input.add(Util.ttp.getId_ttpho());
+					getLoaiSuaTask.addParam("loaiDichVuId", thongTinBaoHong.getID_LoaiDichVu());
+					getLoaiSuaTask.addParam("nhomSuaId", thongTinBaoHong.getID_NhomSua());
+					getLoaiSuaTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
 
 					getLyDoTonTask = new GetLyDoTonTask();
-					getLyDoTonTask.input.add(thongTinBaoHong.getID_LoaiDichVu());
-					getLyDoTonTask.input.add(thongTinBaoHong.getID_NhomTon());
-					getLyDoTonTask.input.add(Util.ttp.getId_ttpho());
+					getLyDoTonTask.addParam("loaiDichVuId", thongTinBaoHong.getID_LoaiDichVu());
+					getLyDoTonTask.addParam("nhomTonId", thongTinBaoHong.getID_NhomTon());
+					getLyDoTonTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
 
 					getLoaiNghiemThuTask = new GetLoaiNghiemThuTask();
-					getLoaiNghiemThuTask.input.add(thongTinBaoHong.getID_LoaiDichVu());
-					getLoaiNghiemThuTask.input.add(Util.ttp.getId_ttpho());
+					getLoaiNghiemThuTask.addParam("loaiDichVuId", thongTinBaoHong.getID_LoaiDichVu());
+					getLoaiNghiemThuTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
 					task.execute(getLoaiSuaTask, getLyDoTonTask, getLoaiNghiemThuTask);
 
 				}

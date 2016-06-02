@@ -1,14 +1,33 @@
 package congnhanvienthong.entity.gtacs;
 
+import com.congnhanvienthong.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import control.AnnotationField;
 
 public class KetCuoi {
+	Marker marker;
+
+	public Marker getMarker() {
+		return this.marker;
+	}
+
+	public void setMarker(Marker mar) {
+		this.marker = mar;
+	}
+
 	private String LONGITUDE;
 	private String LATITUDE;
 	@AnnotationField(hienthi = true, order = 0, tenNhan = "Tên đối tượng")
 	private String M_OBJECT_NAME;
 	@AnnotationField(hienthi = true, order = 3, tenNhan = "Khoảng cách")
-	private String KC; 
+	private String KC;
 	@AnnotationField(hienthi = true, order = 1, tenNhan = "Địa chỉ  kết cuối")
 	private String M_OBJECT_ADDRESS;
 	private String IN_USED, O_TOTAL_SIZE, FAULT_PORT;
@@ -20,7 +39,8 @@ public class KetCuoi {
 	}
 
 	public void setThongTinCong(String thongTinCong) {
-		//ThongTinCong = this.O_TOTAL_SIZE+"/"+this.IN_USED+"/"+this.FAULT_PORT;
+		// ThongTinCong =
+		// this.O_TOTAL_SIZE+"/"+this.IN_USED+"/"+this.FAULT_PORT;
 		this.ThongTinCong = thongTinCong;
 	}
 
@@ -87,10 +107,48 @@ public class KetCuoi {
 	public void setFAULT_PORT(String fAULT_PORT) {
 		FAULT_PORT = fAULT_PORT;
 	}
-	
-	
-	//LONGITUDE=105.854199; LATITUDE=21.027003; 
-	//M_OBJECT_NAME=SB01-DTH/0101/0101; M_OBJECT_ADDRESS=pkt t8 58 quan su; 
-	//IN_USED=1; O_TOTAL_SIZE=32; FAULT_PORT=0; KC=90.22204170
+
+	public Marker creatMaker(GoogleMap map, boolean setDrag, boolean showInfor) {
+		double lat = 0;
+		double lon = 0;
+		Marker marker = null;
+		try {
+			lat = Double.parseDouble(getLatitude());
+			lon = Double.parseDouble(getLongitude());
+			LatLng latLng = new LatLng(lat, lon);
+			MarkerOptions mko = new MarkerOptions();
+			mko.position(latLng);
+
+			int con = 0;
+			try {
+				con = Integer.parseInt(getO_TOTAL_SIZE()) - Integer.parseInt(getIN_USED());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			mko.snippet("Dung lượng(tổng/đã dùng/còn trống) :" + getO_TOTAL_SIZE() + "/" + getIN_USED() + "/" + con);
+			mko.anchor(0.5f, 1.0f);
+			BitmapDescriptor ketcuoiIcon;
+			if (con == 0)
+				ketcuoiIcon = BitmapDescriptorFactory.fromResource(R.drawable.het);
+			else {
+				ketcuoiIcon = BitmapDescriptorFactory.fromResource(R.drawable.con_dl);
+			}
+			mko.icon(ketcuoiIcon);
+			mko.title(getM_OBJECT_NAME());
+			mko.draggable(setDrag);
+			if (showInfor) {
+				marker = map.addMarker(mko);
+				marker.showInfoWindow();
+			} else {
+				marker = map.addMarker(mko);
+			}
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 14));
+
+		} catch (Exception e) {
+		}
+
+		return marker;
+
+	}
 
 }

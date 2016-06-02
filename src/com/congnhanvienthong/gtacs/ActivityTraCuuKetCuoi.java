@@ -13,7 +13,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -55,11 +54,9 @@ import congnhanvienthong.entity.gtacs.LoaiKetCuoiChiTiet;
 import congnhanvienthong.entity.gtacs.ThongTinDonVi;
 import congnhanvienthong.entity.gtacs.ThongTinKetCuoi;
 import congnhanvienthong.entity.gtacs.ThongTinTimKiemKetCuoi;
-import congnhanvienthong.entity.gtacs.UpdateViTri;
 import congnhanvienthong.entity.gtacs.VeTinh;
 import control.Util;
 import view.YourMapFragment;
-import webservice.BaseTask;
 import webservice.WebProtocol;
 import webservice.gtcas.CapNhatToaDoGtcasTask;
 import webservice.gtcas.GetLoaiKetCuoiChiTiet;
@@ -102,7 +99,7 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 	Button btnTimKiem;
 	EditText txtName, txtAdd;
 	GetObjectGTCASInfor getObjectGTCASInfor;
-	HashSet<LatLng> setToaDo;
+	// HashSet<LatLng> setToaDo;
 	Animation out, in;
 	long idCapNhat = 0;
 	CapNhatToaDoGtcasTask capNhatToaDoGtcasTask;
@@ -137,7 +134,6 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 		emptyView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
 		lstData.setAdapter(null);
 		lstData.setEmptyView(emptyView);
-		setToaDo = new HashSet<LatLng>();
 		out = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
 		in = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
 		thongTinTimKiemKetCuoi = new ThongTinTimKiemKetCuoi();
@@ -184,8 +180,8 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
 				getLoaiKetCuoiTask = new GetLoaiKetCuoiTask();
-				getLoaiKetCuoiTask.input.add(Util.ttp.getMa_Ttp());
-				getLoaiKetCuoiTask.input.add(position == 0 ? 7002 : 7000);
+				getLoaiKetCuoiTask.addParam("ma_tinh_thanh", Util.ttp.getMa_Ttp());
+				getLoaiKetCuoiTask.addParam("loaiMangCapID", position == 0 ? 7002 : 7000);
 				thongTinTimKiemKetCuoi.setCableNetwork(position == 0 ? "7002" : "7000");// loaimang
 				onExecuteToServer(true, null, getLoaiKetCuoiTask);
 
@@ -288,11 +284,11 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						capNhatToaDoGtcasTask = new CapNhatToaDoGtcasTask();
-						capNhatToaDoGtcasTask.input.add(Util.ttp.getMa_Ttp());
-						capNhatToaDoGtcasTask.input.add(idCapNhat);
-						capNhatToaDoGtcasTask.input.add("" + arg0.getPosition().longitude);
-						capNhatToaDoGtcasTask.input.add("" + arg0.getPosition().latitude);
-						capNhatToaDoGtcasTask.input.add(Util.userName);
+						capNhatToaDoGtcasTask.addParam("MaTinhThanh", Util.ttp.getMa_Ttp());
+						capNhatToaDoGtcasTask.addParam("ObjectId", idCapNhat);
+						capNhatToaDoGtcasTask.addParam("Long", arg0.getPosition().longitude);
+						capNhatToaDoGtcasTask.addParam("Lat", arg0.getPosition().latitude);
+						capNhatToaDoGtcasTask.addParam("UserName", Util.userName);
 						onExecuteToServer(true, null, capNhatToaDoGtcasTask);
 
 					}
@@ -307,9 +303,11 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 			}
 		});
 		getVeTinhTask = new GetVeTinhTheoDonViTask();
+
 		donViTask = new GetThongTinDonViTask();
-		donViTask.input.add(Util.ttp.getMa_Ttp());
-		donViTask.input.add(Util.userName);
+		donViTask.addParam("ma_tinh_thanh", Util.ttp.getMa_Ttp());
+		donViTask.addParam("user_name", Util.userName);
+
 		onExecuteToServer(true, null, donViTask);
 
 		spnVeTinh.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -339,8 +337,8 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 					thongTinTimKiemKetCuoi.setpM_OBJECT_FNO("" + lkc.getID());// ketcuoi
 				}
 				getLoaiKetCuoiChiTiet = new GetLoaiKetCuoiChiTiet();
-				getLoaiKetCuoiChiTiet.input.add(Util.ttp.getMa_Ttp());
-				getLoaiKetCuoiChiTiet.input.add(lkc.getID());
+				getLoaiKetCuoiChiTiet.addParam("ma_tinh_thanh", Util.ttp.getMa_Ttp());
+				getLoaiKetCuoiChiTiet.addParam("typeID", lkc.getID());
 				thongTinTimKiemKetCuoi.setpM_OBJECT_SUB_TYPE_ID("");
 				onExecuteToServer(true, null, getLoaiKetCuoiChiTiet);
 			}
@@ -376,18 +374,19 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				pageIndex = pageIndex + 1;
 				getObjectGTCASInfor = new GetObjectGTCASInfor();
-				getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getMa_tinh_thanh());
-				getObjectGTCASInfor.input.add(Util.userName);
-				getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getMa_ve_tinh());
-				getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getCableNetwork());
-				getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getpM_OBJECT_FNO());
-				getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getpM_OBJECT_SUB_TYPE_ID() == null
-						? thongTinTimKiemKetCuoi.getpM_OBJECT_SUB_TYPE_ID() : 0);
+				getObjectGTCASInfor.addParam("ma_tinh_thanh", thongTinTimKiemKetCuoi.getMa_tinh_thanh());
+				getObjectGTCASInfor.addParam("user_name", Util.userName);
+				getObjectGTCASInfor.addParam("ma_ve_tinh", thongTinTimKiemKetCuoi.getMa_ve_tinh());
+				getObjectGTCASInfor.addParam("cableNetwork", thongTinTimKiemKetCuoi.getCableNetwork());
+				getObjectGTCASInfor.addParam("pM_OBJECT_FNO", thongTinTimKiemKetCuoi.getpM_OBJECT_FNO());
+				getObjectGTCASInfor.addParam("pM_OBJECT_SUB_TYPE_ID",
+						thongTinTimKiemKetCuoi.getpM_OBJECT_SUB_TYPE_ID() == null
+								? thongTinTimKiemKetCuoi.getpM_OBJECT_SUB_TYPE_ID() : 0);
 
-				getObjectGTCASInfor.input.add("" + txtName.getText().toString());
-				getObjectGTCASInfor.input.add("" + txtAdd.getText().toString());
-				getObjectGTCASInfor.input.add(pageIndex);
-				getObjectGTCASInfor.input.add("5");
+				getObjectGTCASInfor.addParam("pM_OBJECT_NAME", txtName.getText().toString());
+				getObjectGTCASInfor.addParam("pM_OBJECT_ADDR", txtAdd.getText().toString());
+				getObjectGTCASInfor.addParam("pPageIndex", pageIndex);
+				getObjectGTCASInfor.addParam("pPageSize", "5");
 
 				onExecuteToServer(true, null, getObjectGTCASInfor);
 			}
@@ -400,9 +399,9 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 				ThongTinDonVi dv = (ThongTinDonVi) arg0.getAdapter().getItem(arg2);
 				if (dv != null) {
 					getVeTinhTask = new GetVeTinhTheoDonViTask();
-					getVeTinhTask.input.add(Util.ttp.getMa_Ttp());
-					getVeTinhTask.input.add(Util.userName);
-					getVeTinhTask.input.add(dv.getID());
+					getVeTinhTask.addParam("ma_tinh_thanh", Util.ttp.getMa_Ttp());
+					getVeTinhTask.addParam("user_name", Util.userName);
+					getVeTinhTask.addParam("maDonViQL", dv.getID());
 					onExecuteToServer(true, null, getVeTinhTask);
 				}
 
@@ -567,18 +566,20 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 			lstData.setAdapter(null);
 			pageIndex = 1;
 			getObjectGTCASInfor = new GetObjectGTCASInfor();
-			getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getMa_tinh_thanh());
-			getObjectGTCASInfor.input.add(Util.userName);
-			getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getMa_ve_tinh());
-			getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getCableNetwork());
-			getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getpM_OBJECT_FNO());
-			getObjectGTCASInfor.input.add(thongTinTimKiemKetCuoi.getpM_OBJECT_SUB_TYPE_ID() == null
-					? thongTinTimKiemKetCuoi.getpM_OBJECT_SUB_TYPE_ID() : 0);
+			getObjectGTCASInfor = new GetObjectGTCASInfor();
+			getObjectGTCASInfor.addParam("ma_tinh_thanh", thongTinTimKiemKetCuoi.getMa_tinh_thanh());
+			getObjectGTCASInfor.addParam("user_name", Util.userName);
+			getObjectGTCASInfor.addParam("ma_ve_tinh", thongTinTimKiemKetCuoi.getMa_ve_tinh());
+			getObjectGTCASInfor.addParam("cableNetwork", thongTinTimKiemKetCuoi.getCableNetwork());
+			getObjectGTCASInfor.addParam("pM_OBJECT_FNO", thongTinTimKiemKetCuoi.getpM_OBJECT_FNO());
+			getObjectGTCASInfor.addParam("pM_OBJECT_SUB_TYPE_ID",
+					thongTinTimKiemKetCuoi.getpM_OBJECT_SUB_TYPE_ID() == null
+							? thongTinTimKiemKetCuoi.getpM_OBJECT_SUB_TYPE_ID() : 0);
 
-			getObjectGTCASInfor.input.add("" + txtName.getText().toString());
-			getObjectGTCASInfor.input.add("" + txtAdd.getText().toString());
-			getObjectGTCASInfor.input.add(pageIndex);
-			getObjectGTCASInfor.input.add("5");
+			getObjectGTCASInfor.addParam("pM_OBJECT_NAME", txtName.getText().toString());
+			getObjectGTCASInfor.addParam("pM_OBJECT_ADDR", txtAdd.getText().toString());
+			getObjectGTCASInfor.addParam("pPageIndex", pageIndex);
+			getObjectGTCASInfor.addParam("pPageSize", "5");
 			onExecuteToServer(true, "Tìm kiếm thông tin ?", getObjectGTCASInfor);
 			break;
 		}
@@ -623,7 +624,6 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 		mko.icon(ketcuoiIcon);
 		mko.title(thongTinKetCuoi.getM_OBJECT_NAME());
 
-		setToaDo.add(latLng);
 		mko.draggable(setDrag);
 		Marker m = map.addMarker(mko);
 		if (showInfor) {

@@ -1,95 +1,45 @@
 package congnhanvienthong.entity.dhsc;
 
+import control.AnnotationField;
+
 public class ThongTinDichVu {
-	private String Ma_DichVu;
-	private String Ma_TC;
-	private String Ten_TB;
-	private String DiaChi;
-	private String SoLienHe;
-	private String Id_LoaiDichVu;
-	private String LoaiDichVu;
-	private String TenPhuongXa;
-	private String TenQuanHuyen;
-	private String TrangThaiTB;
-
-	public String getMa_DichVu() {
-		return Ma_DichVu;
-	}
-
-	public void setMa_DichVu(String ma_DichVu) {
-		Ma_DichVu = ma_DichVu;
-	}
-
-	public String getMa_TC() {
-		return Ma_TC;
-	}
-
-	public void setMa_TC(String ma_TC) {
-		Ma_TC = ma_TC;
-	}
-
-	public String getTen_TB() {
-		return Ten_TB;
-	}
-
-	public void setTen_TB(String ten_TB) {
-		Ten_TB = ten_TB;
-	}
-
-	public String getDiaChi() {
-		return DiaChi;
-	}
-
-	public void setDiaChi(String diaChi) {
-		DiaChi = diaChi;
-	}
-
-	public String getSoLienHe() {
-		return SoLienHe;
-	}
-
-	public void setSoLienHe(String soLienHe) {
-		SoLienHe = soLienHe;
-	}
-
-	public String getId_LoaiDichVu() {
-		return Id_LoaiDichVu;
-	}
-
-	public void setId_LoaiDichVu(String id_LoaiDichVu) {
-		Id_LoaiDichVu = id_LoaiDichVu;
-	}
-
-	public String getLoaiDichVu() {
-		return LoaiDichVu;
-	}
-
-	public void setLoaiDichVu(String loaiDichVu) {
-		LoaiDichVu = loaiDichVu;
-	}
-
-	public String getTenPhuongXa() {
-		return TenPhuongXa;
-	}
-
-	public void setTenPhuongXa(String tenPhuongXa) {
-		TenPhuongXa = tenPhuongXa;
-	}
-
-	public String getTenQuanHuyen() {
-		return TenQuanHuyen;
-	}
-
-	public void setTenQuanHuyen(String tenQuanHuyen) {
-		TenQuanHuyen = tenQuanHuyen;
-	}
-
-	public String getTrangThaiTB() {
-		return TrangThaiTB;
-	}
-
-	public void setTrangThaiTB(String trangThaiTB) {
-		TrangThaiTB = trangThaiTB;
-	}
-
+	@AnnotationField(hienthi = true, tenNhan = "Mã Dịch Vụ", order = 0)
+	String Ma_DichVu;
+	String Ma_TC;
+	@AnnotationField(hienthi = true, tenNhan = "Account", order = 2)
+	String Account;
+	@AnnotationField(hienthi = true, tenNhan = "Tên Thuê Bao", order = 3)
+	String Ten_TB;
+	@AnnotationField(hienthi = true, tenNhan = "Địa chỉ", order = 4)
+	String DiaChi;
+	@AnnotationField(hienthi = true, tenNhan = "Số liên hệ", order = 5)
+	String SoLienHe;
+	String Id_LoaiDichVu;
+	@AnnotationField(hienthi = true, tenNhan = "Loại dịch vụ", order = 6)
+	String LoaiDichVu;
+	@AnnotationField(hienthi = true, tenNhan = "Phường xã", order = 7)
+	String TenPhuongXa;
+	@AnnotationField(hienthi = true, tenNhan = "Quận huyện", order = 8)
+	String TenQuanHuyen;
+	@AnnotationField(hienthi = true, tenNhan = "Trạng thái thuê bao", order = 9)
+	String TrangThaiTB;
+	int LoaiKhachHangId;
+	String MaLoaiKhachHang;
+	@AnnotationField(hienthi = true, tenNhan = "Loại khách hàng", order = 10)
+	String TenLoaiKhachHang;
+	int UuTienId;
+	int VungSuaChuaId;
+	@AnnotationField(hienthi = true, tenNhan = "Trung tâm", order = 11)
+	String TrungTam;
+	String Doi;
+	@AnnotationField(hienthi = true, tenNhan = "Vệ Tinh", order = 12)
+	String VeTinh;
+	String DVI_SDUNG;
+	String DVI_DC1;
+	String DAU_DC1;
+	String CUOI_DC1;
+	String CONG_A;
+	String CONG_B;
+	String DIEM_TRUNGGIAN;
+	String TOC_DO;
 }

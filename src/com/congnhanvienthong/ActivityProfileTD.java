@@ -28,10 +28,8 @@ public class ActivityProfileTD extends ActivityBaseToDisplay {
 		setHeader("Thông tin tài khoản");
 		if (Util.listLoaiDichVu == null && Util.isUserDHSC == true) {
 			layListDichVuTask = new LayListDichVuTask();
-			layListDichVuTask.para.add("id_ttpho");
-			layListDichVuTask.input.add(Util.ttp.getId_ttpho());
-			layListDichVuTask.para.add("error");
-			layListDichVuTask.input.add("1");
+			layListDichVuTask.addParam("id_ttpho", Util.ttp.getId_ttpho());
+			layListDichVuTask.addParam("error", 1);
 			Task task = new Task();
 			task.execute(layListDichVuTask);
 		} else {

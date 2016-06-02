@@ -1,6 +1,5 @@
 package webservice;
 
-
 public class GetProfileTDTask extends BaseTask {
 	public GetProfileTDTask() {
 		// TODO Auto-generated constructor stub
@@ -12,16 +11,13 @@ public class GetProfileTDTask extends BaseTask {
 		User_WS = "WSGWDVKH";
 		Pass_WS = "Authentication";
 		headerTitle = "AuthHeader";
-		para.add("userName");
-		para.add("passWord");
-		para.add("accountSearch");
 
 	}
 
 	public void setData(String user) {
-		input.add("ptpm2");
-		input.add("ptpm2@123");
-		input.add(user);
+		addParam("userName", "ptpm2");
+		addParam("passWord", "ptpm2@123");
+		addParam("accountSearch", user);
 	}
 
 }

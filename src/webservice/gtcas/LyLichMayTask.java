@@ -15,8 +15,8 @@ public class LyLichMayTask extends BaseTask {
 		headerTitle = "AuthHeader";
 		pUserLabel = "Username";
 		pPassLabel = "Password";
-		para.add("ma_dich_vu");
-		para.add("ma_tinh_thanh");
+		// para.add("ma_dich_vu");
+		// para.add("ma_tinh_thanh");
 	}
 
 }

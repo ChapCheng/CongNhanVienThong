@@ -10,9 +10,7 @@ public class LoginTDTask extends BaseTask {
 		User_WS = "WSGWDVKH1";
 		Pass_WS = "Authentication1";
 		headerTitle = "AuthHeader";
-		para.add("prUsername");
-		para.add("prPassword");
-		para.add("prUsingOTP");
+
 	}
 
 }

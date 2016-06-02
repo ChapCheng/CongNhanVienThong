@@ -10,9 +10,8 @@ import com.congnhanvienthong.dhsc.ActivityDoThuTTP;
 import com.congnhanvienthong.dhsc.ActivityLyLichSuaChua;
 import com.congnhanvienthong.dhsc.ActivityNhanKhoaPhieuTTP;
 import com.congnhanvienthong.gtacs.ActivityLyLichMay;
-import com.congnhanvienthong.gtacs.ActivityTimKiemKetCuoiKhongGian;
 import com.congnhanvienthong.gtacs.ActivityTraCuuKetCuoi;
-import com.congnhanvienthong.pttb.ActivityCheckUserCsonline;
+import com.congnhanvienthong.kdb.ActivityKhoanDiaBan;
 import com.congnhanvienthong.pttb.ActivityLoginHoanCongPTTB;
 import com.congnhanvienthong.pttb.ActivityTraCuuChung;
 import com.congnhanvienthong.pttb.ActivityTraCuuToaNha;
@@ -20,6 +19,7 @@ import com.congnhanvienthong.qlnt.ActivityTraCuuNhaTram;
 import com.congnhanvienthong.qltt.ActivityAuthentication;
 import com.congnhanvienthong.qltt.ActivityTimKiemThanhToan;
 import com.congnhanvienthong.qltt.ActivityTraCuuNo;
+import com.congnhanvienthong.vitri.ActivityQuetDoiTuongTheoBanKinh;
 import com.slidingmenu.lib.SlidingMenu;
 
 import android.annotation.SuppressLint;
@@ -232,50 +232,42 @@ public class ActivityBaseToDisplay extends SherlockFragmentActivity
 
 	// Đổ dữ liệu vào menu
 	protected void onCreatRightMenu() {
+
+		// Menu của điều hành sửa chữa
+		items.add(new SectionItem("Dành cho Công nhân Kỹ Thuật"));
+		items.add(new EntryItem("Hoàn công lắp đặt", ActivityLoginHoanCongPTTB.class, R.drawable.cap_nhat));
 		if (Util.isUserDHSC == true) {
-			// Menu của điều hành sửa chữa
-			items.add(new SectionItem("Điều hành sửa chữa"));
-			items.add(new EntryItem("Tra cứu", ACtivityTraCuuTTP.class, R.drawable.tracuu_dothu));
 			items.add(new EntryItem("Nhận Báo Hỏng", ActivityBaoHongTTP.class, R.drawable.lock));
 			items.add(new EntryItem("Đo Thử", ActivityDoThuTTP.class, R.drawable.do_thu));
-
 			items.add(new EntryItem("Khóa phiếu sửa chữa", ActivityNhanKhoaPhieuTTP.class, R.drawable.lock));
 			items.add(new EntryItem("Lý lịch sửa chữa", ActivityLyLichSuaChua.class, R.drawable.tracuu_dothu));
 
+			items.add(new EntryItem("Tra cứu dịch vụ", ACtivityTraCuuTTP.class, R.drawable.tracuu_dothu));
+			items.add(new EntryItem("Lý lịch máy", ActivityLyLichMay.class, R.drawable.cap_nhat));
 		}
 		// Menu PTTB
 		if (true) {
-			items.add(new SectionItem("Phát triển thuê bao"));
-			items.add(new EntryItem("Hoàn công dịch vụ", ActivityLoginHoanCongPTTB.class, R.drawable.cap_nhat));
-			items.add(new EntryItem("Tìm kiếm tòa nhà", ActivityTraCuuToaNha.class, R.drawable.cap_nhat));
+			items.add(new SectionItem("Dành cho nhân viên kinh doanh"));
+
 			items.add(new EntryItem("Tra cứu chung", ActivityTraCuuChung.class, R.drawable.cap_nhat));
-			items.add(new EntryItem("CSOnline", ActivityCheckUserCsonline.class, R.drawable.cap_nhat));
-		}
-		// Menu Quản lý mạng cáp
-		if (Util.isUserGTCAS) {
-			items.add(new SectionItem("Quản lý mạng cáp"));
-			items.add(new EntryItem("Tìm kiếm kết cuối", ActivityTraCuuKetCuoi.class, R.drawable.cap_nhat));
-			items.add(new EntryItem("Tìm kết cuối theo không gian", ActivityTimKiemKetCuoiKhongGian.class,
+
+			items.add(new EntryItem("Quét các đối tượng  theo bán kính", ActivityQuetDoiTuongTheoBanKinh.class,
 					R.drawable.cap_nhat));
-			items.add(new EntryItem("Lý lịch máy", ActivityLyLichMay.class, R.drawable.cap_nhat));
-		}
-		if (true) {
-			items.add(new SectionItem("Quản lý nhà trạm"));
-			items.add(new EntryItem("Tra cứu nhà trạm", ActivityTraCuuNhaTram.class, R.drawable.cap_nhat));
-		}
-		//
-		// Menu Thanh toán
-		//
+			items.add(new EntryItem("Tra thông tin tòa nhà", ActivityTraCuuToaNha.class, R.drawable.cap_nhat));
+			if (Util.isUserGTCAS)
+				items.add(new EntryItem("Tra thông tin kết cuối", ActivityTraCuuKetCuoi.class, R.drawable.cap_nhat));
+			items.add(new EntryItem("Tra thông tin nhà trạm", ActivityTraCuuNhaTram.class, R.drawable.cap_nhat));
+			items.add(new EntryItem("Tra cứu nợ", ActivityTraCuuNo.class, R.drawable.cap_nhat));
+			if (Util.isUserQLTT) {
+				items.add(new EntryItem("Thanh toán", ActivityTimKiemThanhToan.class, R.drawable.payment));
 
-		items.add(new SectionItem("Thanh toán"));
-		items.add(new EntryItem("Tra cứu nợ", ActivityTraCuuNo.class, R.drawable.cap_nhat));
-		if (Util.isUserQLTT) {
-			items.add(new EntryItem("Thanh toán", ActivityTimKiemThanhToan.class, R.drawable.payment));
-
-			items.add(new EntryItem("Xác thực thanh toán", ActivityAuthentication.class, R.drawable.security_string));
+				items.add(
+						new EntryItem("Xác thực thanh toán", ActivityAuthentication.class, R.drawable.security_string));
+			}
 		}
 
-		items.add(new SectionItem("Tài khoản"));
+		items.add(new SectionItem("Dùng chung"));
+		items.add(new EntryItem("Khoán địa bàn", ActivityKhoanDiaBan.class, R.drawable.cap_nhat));
 		items.add(new EntryItem("Trợ giúp", ActivityHelpMenu.class, R.drawable.help));
 		items.add(new EntryItem("Tài khoản", ActivityProfileTD.class, R.drawable.account));
 		items.add(new EntryItem("Cường độ sóng", null, R.drawable.bts_icon_red));
@@ -325,6 +317,7 @@ public class ActivityBaseToDisplay extends SherlockFragmentActivity
 				for (int j = 0; j < length; j++) {
 					runTask = params[0];
 					params[j].execute();
+					params[j].SetConText(context);
 				}
 
 			} catch (Exception e) {

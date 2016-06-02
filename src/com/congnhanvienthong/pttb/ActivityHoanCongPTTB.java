@@ -34,7 +34,6 @@ import congnhanvienthong.entity.pttb.ChiTietThueBao;
 import congnhanvienthong.entity.pttb.ThongTinThueBao;
 import control.Util;
 import view.YourMapFragment;
-import webservice.BaseTask;
 import webservice.GetViTriTask;
 import webservice.WebProtocol;
 import webservice.pttb.CapNhatHoanCongTask;
@@ -129,8 +128,8 @@ public class ActivityHoanCongPTTB extends ActivityBaseToDisplay {
 		});
 		DS_Click_Button();
 		getViTriTask = new GetViTriTask();
-		getViTriTask.input.add(thongtin_thuebao.getMA_THUE_BAO());
-		getViTriTask.input.add("2");
+		getViTriTask.addParam("ma_dichvu", thongtin_thuebao.getMA_THUE_BAO());
+		getViTriTask.addParam("id_hethong", "2");
 		Task taskGetTask = new Task();
 		taskGetTask.execute(getViTriTask);
 
@@ -154,15 +153,15 @@ public class ActivityHoanCongPTTB extends ActivityBaseToDisplay {
 			sNguoiCaiDat = sNguoiCaiDat.trim();
 			sHdtb_ID = Hdtb_id.getText().toString();
 			capnhat = new CapNhatHoanCongTask();
-			capnhat.input.add(sHdtb_ID);
-			capnhat.input.add(sNgayCaiDat);
+			capnhat.addParam("sHDTB_ID", sHdtb_ID);
+			capnhat.addParam("sNGAY_HOAN_CONG", sNgayCaiDat);
 
 			if (sNguoiCaiDat.equals("")) {
-				capnhat.input.add("toanpv");
+				capnhat.addParam("sNGUOI_HOAN_CONG", "toanpv");
 			} else {
-				capnhat.input.add(sNguoiCaiDat);
+				capnhat.addParam("sNGUOI_HOAN_CONG", sNguoiCaiDat);
 			}
-			capnhat.input.add("1");
+			capnhat.addParam("sLOAI", "1");
 			if (thongtin_thuebao.getNGAY_CAI_DAT() == null || thongtin_thuebao.getNGAY_CAI_DAT().equals("")) {
 				Util.showAlert(context, "Chưa có ngày hoàn công!");
 				coNgayHoanCong = false;
@@ -176,9 +175,9 @@ public class ActivityHoanCongPTTB extends ActivityBaseToDisplay {
 			}
 
 			Location vitriThueBao = map.getMyLocation();
-			capnhat.input.add(vitriThueBao.getLongitude());
-			capnhat.input.add(vitriThueBao.getLatitude());
-			capnhat.input.add(Util.ttp.getMa_Ttp());
+			capnhat.addParam("sLONG", vitriThueBao.getLongitude());
+			capnhat.addParam("sLAT", vitriThueBao.getLatitude());
+			capnhat.addParam("sMA_TINHTP", Util.ttp.getMa_Ttp());
 			if (thongtin_thuebao.getNGUOI_CAI_DAT() == null || thongtin_thuebao.getNGUOI_CAI_DAT().equals("")) {
 				thongtin_thuebao.setNGUOI_CAI_DAT(Util.userName);
 			}
@@ -193,15 +192,16 @@ public class ActivityHoanCongPTTB extends ActivityBaseToDisplay {
 					break;
 
 				}
-				capNhatViTriPTTBTask.input.add("MegaVNN");
-				capNhatViTriPTTBTask.input.add(Util.userName);
-				capNhatViTriPTTBTask.input.add(thongtin_thuebao);
+				capNhatViTriPTTBTask.addParam("eidLoaiDoiTuong", "MegaVNN");
+				capNhatViTriPTTBTask.addParam("user", Util.userName);
+				capNhatViTriPTTBTask.addParam("oThongTinThueBao", thongtin_thuebao);
 				oChiTietThueBao = new ChiTietThueBao();
 				oChiTietThueBao.dichvucc = "2";
 				oChiTietThueBao.image = Util.BitMapToString(bitmap);
 				oChiTietThueBao.latitude = String.valueOf(vitriThueBao.getLatitude());
 				oChiTietThueBao.longtitude = String.valueOf(vitriThueBao.getLongitude());
-				capNhatViTriPTTBTask.input.add(oChiTietThueBao);
+				capNhatViTriPTTBTask.addParam("oChiTietThueBao", oChiTietThueBao);
+				task.execute(capnhat);
 				task.execute(capNhatViTriPTTBTask);
 			}
 			if (!checkCapNhatViTri) {
@@ -334,6 +334,9 @@ public class ActivityHoanCongPTTB extends ActivityBaseToDisplay {
 
 			}
 
+		}
+		if (ws instanceof CapNhatViTriPTTBTask) {
+			Util.showAlert(context, ((CapNhatViTriPTTBTask) ws).result.toString());
 		}
 	}
 

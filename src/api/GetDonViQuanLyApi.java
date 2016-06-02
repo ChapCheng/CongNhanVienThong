@@ -10,7 +10,7 @@ public class GetDonViQuanLyApi extends ApiTask {
 	public GetDonViQuanLyApi() {
 		// TODO Auto-generated constructor stub
 		super();
-		this.url = "http://10.10.20.106/qlntapi/api/Mobi/GetDsDonViQuanLy";
+		this.url = "http://123.16.191.37/qlntapi/api/Mobi/GetDsDonViQuanLy";
 		this.addParam("userName", "PM1");
 		this.addParam("passWord", "@PM1_VNPT@");
 		this.addParam("maTinhThanh", "HNI");

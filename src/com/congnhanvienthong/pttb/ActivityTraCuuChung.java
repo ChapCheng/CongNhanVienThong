@@ -1,19 +1,21 @@
 package com.congnhanvienthong.pttb;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import com.congnhanvienthong.ActivityBaseToDisplay;
 import com.congnhanvienthong.R;
 
 import adapter.BaseListViewAdapter;
 import adapter.BaseSpinnerAdapter;
+import android.app.Dialog;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,7 +23,6 @@ import congnhanvienthong.entity.tracuuchung.KieuSapXep;
 import congnhanvienthong.entity.tracuuchung.KieuTimKiem;
 import congnhanvienthong.entity.tracuuchung.ThongTinTraCuuChung;
 import control.Util;
-import webservice.BaseTask;
 import webservice.WebProtocol;
 import webservice.tracuuchung.DanhMucCheDoSapXepTask;
 import webservice.tracuuchung.DanhMucKieuTimKiemTask;
@@ -32,14 +33,16 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 	ArrayList<KieuSapXep> lstKieuSapXepObj;
 	ArrayList<KieuTimKiem> lstKieuTimKiemObj;
 	ArrayList<ThongTinTraCuuChung> lstThongTinTraCuuChungObj;
-	Button btnOK;
+	Button btnOK, btnClose;
 	DanhMucCheDoSapXepTask danhMucKieuSapXepTask;
 	DanhMucKieuTimKiemTask danhMucKieuTimKiemTask;
 	TraCuuChungTask tracuuTask;
 	ListView lstKetQua;
 	BaseListViewAdapter<ThongTinTraCuuChung> adapter;
-	EditText txtFillter, txtTimKiem;
+	EditText txtTimKiem;
 	TextView txtLabel;
+	Dialog dialog;
+	TextView txtDetail, txtInfor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,38 +53,36 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 		btnOK = (Button) foot.findViewById(R.id.bttOK);
 		disableShortCut();
 		btnOK.setOnClickListener(this);
+		setHeader("Tra cứu chung");
 		lstKetQua = (ListView) body.findViewById(R.id.lstData);
-
-		txtFillter = (EditText) body.findViewById(R.id.txtFillter);
+		// txtInfor = new TextView(this);
+		// txtInfor.setLayoutParams(new
+		// Gallery.LayoutParams(LayoutParams.WRAP_CONTENT,
+		// LayoutParams.WRAP_CONTENT));
 		txtTimKiem = (EditText) body.findViewById(R.id.inputData);
-		txtFillter.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void afterTextChanged(Editable arg0) {
-				// TODO Auto-generated method stub
-				String text = txtFillter.getText().toString().toLowerCase(Locale.getDefault());
-				if (adapter != null)
-					adapter.Fillter(text);
-				// Util.setListViewHeightBasedOnChildren(lstKetQua);
-
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-				// TODO Auto-generated method stub
-			}
-		});
 		danhMucKieuSapXepTask = new DanhMucCheDoSapXepTask();
 		danhMucKieuTimKiemTask = new DanhMucKieuTimKiemTask();
 		spnKieuSapXep = (Spinner) body.findViewById(R.id.spnsapxep);
 		spnKieuTimKiem = (Spinner) body.findViewById(R.id.spnkiemtimkiem);
-
 		onExecuteToServer(true, null, danhMucKieuSapXepTask, danhMucKieuTimKiemTask);
+		dialog = new Dialog(context);
+		dialog.setContentView(R.layout.tracuuchung_detail);
+		dialog.setCancelable(true);
+		dialog.setTitle("Thông tin chi tiết");
+		txtDetail = (TextView) dialog.findViewById(R.id.ketqua);
+		btnClose = (Button) dialog.findViewById(R.id.btnClose);
+		btnClose.setOnClickListener(this);
+		lstKetQua.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				ThongTinTraCuuChung thongtin = (ThongTinTraCuuChung) parent.getAdapter().getItem(position);
+				Util.setTextFromObjectAllField(txtDetail, thongtin);
+				dialog.show();
+
+			}
+		});
 
 	}
 
@@ -103,9 +104,18 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 			spnKieuTimKiem.setAdapter(TimKiemAdapter);
 		}
 		if (ws.equals(tracuuTask)) {
-			lstThongTinTraCuuChungObj = (ArrayList<ThongTinTraCuuChung>) tracuuTask.getResult();
-			adapter = new BaseListViewAdapter<ThongTinTraCuuChung>(context, lstThongTinTraCuuChungObj, null, false);
-			lstKetQua.setAdapter(adapter);
+
+			try {
+				lstThongTinTraCuuChungObj = (ArrayList<ThongTinTraCuuChung>) tracuuTask.getResult();
+				adapter = new BaseListViewAdapter<ThongTinTraCuuChung>(context, lstThongTinTraCuuChungObj, true);
+				lstKetQua.setAdapter(adapter);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+
+			// txtInfor.setText("Có tổng số " + lstThongTinTraCuuChungObj.size()
+			// + " phù hợp.");
 
 		}
 
@@ -123,23 +133,24 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 		switch (v.getId()) {
 		case R.id.bttOK:
 			String timkiem = txtTimKiem.getText().toString();
-			txtFillter.setText("");
 			tracuuTask = new TraCuuChungTask();
-
 			KieuSapXep sapxep = (KieuSapXep) spnKieuSapXep.getSelectedItem();
 			KieuTimKiem kieuTimKiem = (KieuTimKiem) spnKieuTimKiem.getSelectedItem();
-			tracuuTask.input.add(timkiem);
-			tracuuTask.input.add(kieuTimKiem.getIdKieuTimKiem());
-			tracuuTask.input.add(sapxep.getIdKieuSapXep());
-			tracuuTask.input.add(Util.ttp.getMa_Ttp());
+			tracuuTask.addParam("SearchText", timkiem);
+			tracuuTask.addParam("SearchOption", kieuTimKiem.getIdKieuTimKiem());
+			tracuuTask.addParam("SearchOrder", sapxep.getIdKieuSapXep());
+			tracuuTask.addParam("TinhTP_ID", Util.ttp.getMa_Ttp());
 			if (timkiem.equals("")) {
 				Util.showAlert(context, "Nhập thông tin tìm kiếm");
 				txtTimKiem.setFocusable(true);
 			} else {
 				lstKetQua.setAdapter(null);
-				onExecuteToServer(true, null, tracuuTask);
+				onExecuteToServer(true, "Tra cứu ?", tracuuTask);
 
 			}
+			break;
+		case R.id.btnClose:
+			dialog.dismiss();
 			break;
 
 		}

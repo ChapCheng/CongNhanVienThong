@@ -3,7 +3,6 @@ package com.congnhanvienthong.dhsc;
 import java.util.ArrayList;
 
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
 
 import com.congnhanvienthong.ActivityBaseToDisplay;
 import com.congnhanvienthong.R;
@@ -12,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import adapter.BaseSpinnerAdapter;
+import adapter.MutilChoiceSpinnerAdapter;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -40,7 +40,6 @@ import congnhanvienthong.entity.dhsc.NhanVien;
 import congnhanvienthong.entity.dhsc.ThongTinBaoHong;
 import control.Util;
 import view.YourMapFragment;
-import webservice.BaseTask;
 import webservice.WebProtocol;
 import webservice.dhsc.BaoTonTTP;
 import webservice.dhsc.GetLoaiSuaChiTietTask;
@@ -48,6 +47,7 @@ import webservice.dhsc.KhoaPhieuTTP;
 import webservice.dhsc.ListNhanVienTask;
 import webservice.dhsc.NhanPhieuTask;
 import webservice.dhsc.ThemMoiViTriDHSCTask;
+import webservice.dhsc.TraPhieuWS;
 
 public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 	// biến
@@ -67,14 +67,13 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 	String id_loaisua, idLoaiSuaChiTiet, idNghiemThu, ndGoc = "", ndSuaChitiet = "", ndSua = "", ldTonCt = "",
 			ldTon = "", ndNghiemThu = "", id_ton = "", id_nguoinhan = "";
 	Dialog dialog;
-	// BaoTonTask baoTonTask;
-	KhoaPhieuTTP khoaPhieuDHSCTask;
+	KhoaPhieuTTP khoaPhieuDHSCTask; // not ok
 	ListNhanVienTask listNhanVienTask;
-	Button bttTon, bttKhoaMain, bttNhan;
+	Button bttTon, bttKhoaMain, bttNhan, bttTra;
 	BaoTonTTP baoTonTask;
 
 	GetLoaiSuaChiTietTask getLoaiSuaChiTietTask;
-	NhanPhieuTask nhanPhieuTask;
+	NhanPhieuTask nhanPhieuTask; // not ok
 	Button buttonExit, buttonOK;
 	NhanVien nhanvien;
 	private GoogleMap map;
@@ -172,7 +171,6 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 			public void onClick(View v) {
 				// Khởi tạo dialog và gán các component trên dialog
 				creatDialog(KHOA_TYPE, "Khoá phiếu sửa chữa");
-
 				buttonOK.setOnClickListener(new OnClickListener() {
 
 					// @Override
@@ -198,15 +196,15 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 									Toast.LENGTH_LONG).show();
 						}
 						if (loc != null && cbxLocation.isChecked()) {
-							themMoiViTriDHSCTask.input.add(Util.userName);
-							themMoiViTriDHSCTask.input.add(thongTinBaoHong.getMa_DichVu());
-							themMoiViTriDHSCTask.input.add(thongTinBaoHong.getID_LoaiDichVu());
-							themMoiViTriDHSCTask.input.add(thongTinBaoHong.getDChi_TB());
-							themMoiViTriDHSCTask.input.add(thongTinBaoHong.getTen_TB());
-							themMoiViTriDHSCTask.input.add(thongTinBaoHong.getMa_VT());
-							themMoiViTriDHSCTask.input.add(loc.getLongitude());
-							themMoiViTriDHSCTask.input.add(loc.getLatitude());
-							themMoiViTriDHSCTask.input.add("11111");
+							themMoiViTriDHSCTask.addParam("user", Util.userName);
+							themMoiViTriDHSCTask.addParam("ma_dichvu", thongTinBaoHong.getMa_DichVu());
+							themMoiViTriDHSCTask.addParam("id_loaidichvuDHSC", thongTinBaoHong.getID_LoaiDichVu());
+							themMoiViTriDHSCTask.addParam("diachi", thongTinBaoHong.getDChi_TB());
+							themMoiViTriDHSCTask.addParam("tenthuebao", thongTinBaoHong.getTen_TB());
+							themMoiViTriDHSCTask.addParam("mavt", thongTinBaoHong.getMa_VT());
+							themMoiViTriDHSCTask.addParam("longtitude", loc.getLongitude());
+							themMoiViTriDHSCTask.addParam("latitude", loc.getLatitude());
+							themMoiViTriDHSCTask.addParam("anh", "anh");
 							onExecuteToServer(true, "Xác nhận khóa phiếu", khoaPhieuDHSCTask, themMoiViTriDHSCTask);
 						} else {
 							onExecuteToServer(true, "Xác nhận khóa phiếu", khoaPhieuDHSCTask);
@@ -218,8 +216,6 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 			}
 		});
 
-		// Nút tồn-------------------------------------
-
 		bttTon.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -230,27 +226,45 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-
 						baoTonTask = new BaoTonTTP();
-
-						baoTonTask.input.add(thongTinBaoHong.getID_TrangThai());
-						baoTonTask.input.add(thongTinBaoHong.getID_BaoHong());
-						baoTonTask.input.add(thongTinBaoHong.getID_PhieuSua());
-						baoTonTask.input.add(thongTinBaoHong.getID_LanXPNT());
-						baoTonTask.input.add(thongTinBaoHong.getID_VT());
-						baoTonTask.input.add(nhanvien.getId());
-						baoTonTask.input.add(Util.userName);
-						baoTonTask.input.add(thongTinBaoHong.getID_Xuat());
+						baoTonTask.addParam("trangThaiCuId", thongTinBaoHong.getID_TrangThai());
+						baoTonTask.addParam("baoHongId", thongTinBaoHong.getID_BaoHong());
+						baoTonTask.addParam("phieuSuaId", thongTinBaoHong.getID_PhieuSua());
+						baoTonTask.addParam("phieuId", thongTinBaoHong.getID_LanXPNT());
+						baoTonTask.addParam("veTinhId", thongTinBaoHong.getID_VT());
+						baoTonTask.addParam("nguoiNhanId", nhanvien.getId());
+						baoTonTask.addParam("userName", Util.userName);
+						baoTonTask.addParam("xuatId", thongTinBaoHong.getID_Xuat());
 						ldTonCt = lyDoTon.getTenLyDoTon();
 						ldTon = ldTonCt + ldTon;
-						baoTonTask.input.add(ldTon);
-						baoTonTask.input.add(ldTonCt);
-						baoTonTask.input.add(lyDoTon.getIdLyDoTon());
-						baoTonTask.input.add(thongTinBaoHong.getMa_DichVu());
-						baoTonTask.input.add(thongTinBaoHong.getID_LoaiDichVu());
-						baoTonTask.input.add(Util.ttp.getId_ttpho());
-						Object temp = baoTonTask;
-						System.out.println(temp);
+						baoTonTask.addParam("noiDungTon", ldTon);
+						baoTonTask.addParam("noiDungTonChiTiet", ldTonCt);
+						baoTonTask.addParam("tonId", lyDoTon.getIdLyDoTon());
+						baoTonTask.addParam("maDichvu", thongTinBaoHong.getMa_DichVu());
+						baoTonTask.addParam("loaiDichVuId", thongTinBaoHong.getID_LoaiDichVu());
+						baoTonTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
+						if (Util.ttp.getId_ttpho().equals("1")) {
+							ldTonCt = lyDoTon.getTenLyDoTon();
+							ldTon = ldTonCt + ldTon;
+							baoTonTask = new BaoTonTTP();
+							baoTonTask.addParam("tonId", lyDoTon.getIdLyDoTon());
+							baoTonTask.addParam("lyDoTon", ldTonCt);
+							baoTonTask.addParam("trangThaiId", thongTinBaoHong.getID_TrangThai());
+							baoTonTask.addParam("loaiDichVuId", thongTinBaoHong.getID_LoaiDichVu());
+							baoTonTask.addParam("maDichVu", thongTinBaoHong.getMa_DichVu());
+							baoTonTask.addParam("loaiDichVuChiTietId", thongTinBaoHong.getID_LoaiDichVuCT());
+							baoTonTask.addParam("lanxpntId", thongTinBaoHong.getID_LanXPNT());
+							baoTonTask.addParam("xuatId", thongTinBaoHong.getID_Xuat());
+							baoTonTask.addParam("phieuId", thongTinBaoHong.getID_PhieuSua());
+							baoTonTask.addParam("phieuSuaId", thongTinBaoHong.getID_PhieuSua());
+							baoTonTask.addParam("nguoiTonId", nhanvien.getId());
+							baoTonTask.addParam("userName", Util.userName);
+							baoTonTask.addParam("soMayLienHe", "");
+							baoTonTask.addParam("soDienThoaiToVienThong", "");
+							baoTonTask.addParam("ngayHen", "");
+
+						}
+
 						onExecuteToServer(true, "Báo tồn ??", baoTonTask);
 
 					}
@@ -344,20 +358,22 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 
 		}
 		if (task.equals(nhanPhieuTask)) {
-			// Object temp = ketqua.get(0);
-			// SoapObject tempObj = (SoapObject) temp;
-			// if (tempObj.getProperty("IsError").toString().contains("false"))
-			// {
-			// thongTinBaoHong.setIsAllowKhoa(true);
-			// thongTinBaoHong.setIsAllowTon(true);
-			// thongTinBaoHong.setAllowNhan(false);
-			// refresh(thongTinBaoHong);
-			// dialog.dismiss();
-			// Intent i = new Intent(context, ActivityNhanKhoaPhieuTTP.class);
-			// startActivity(i);
-			// finish();
-			//
-			// }
+			Util.showAlert(context, nhanPhieuTask.getResult().toString());
+			if (nhanPhieuTask.erros.contains("false")) {
+				thongTinBaoHong.setIsAllowKhoa(true);
+				thongTinBaoHong.setIsAllowTon(true);
+				thongTinBaoHong.setAllowNhan(false);
+				refresh(thongTinBaoHong);
+				dialog.dismiss();
+				Intent i = new Intent(context, ActivityNhanKhoaPhieuTTP.class);
+				startActivity(i);
+				finish();
+
+			}
+
+		}
+		if (task instanceof TraPhieuWS) {
+			Util.showAlert(context, task.getResult().toString());
 
 		}
 	}
@@ -380,6 +396,10 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 			bttNhan.setEnabled(false);
 		} else
 			bttNhan.setEnabled(true);
+		if (Util.ttp.getId_ttpho().equals("1")) {
+			bttNhan.setVisibility(View.GONE);
+			bttTra.setVisibility(View.VISIBLE);
+		}
 
 	}
 
@@ -406,8 +426,7 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 
 		setFootLayout(R.layout.foot_activity_chi_tiet_phieu);
 		listNhanVienTask = new ListNhanVienTask();
-		listNhanVienTask.input.add(Util.userName);
-		listNhanVienTask.input.add("");
+		listNhanVienTask.addParam("userName", Util.userName);
 		cbxLocation = (CheckBox) body.findViewById(R.id.cbxLocation);
 		onExecuteToServer(false, null, listNhanVienTask);
 
@@ -417,6 +436,8 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 		// ----- Nhấn nút khóa, hiện dialog với màn hình khóa
 		bttKhoaMain = (Button) foot.findViewById(R.id.phieu_khoa);
 		bttNhan = (Button) foot.findViewById(R.id.take_image);
+		bttTra = (Button) foot.findViewById(R.id.bttTraPhieu);
+		bttTra.setOnClickListener(this);
 		bttNhan.setText("Nhận");
 		refresh(thongTinBaoHong);
 
@@ -457,13 +478,9 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 				// TODO Auto-generated method stub
 				loaiSua = (LoaiSua) arg0.getAdapter().getItem(arg2);
 				getLoaiSuaChiTietTask = new GetLoaiSuaChiTietTask();
-				getLoaiSuaChiTietTask.input.add(loaiSua.getIdLoaiSua());
-				getLoaiSuaChiTietTask.input.add(Util.ttp.getId_ttpho());
-
-				getLoaiSuaChiTietTask.input.add(Util.userName);
-				getLoaiSuaChiTietTask.input.add("s");
+				getLoaiSuaChiTietTask.addParam("loaiSuaId", loaiSua.getIdLoaiSua());
+				getLoaiSuaChiTietTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
 				// task.execute(getLoaiSuaChiTietTask);
-				id_loaisua = loaiSua.getIdLoaiSua();
 				onExecuteToServer(true, null, getLoaiSuaChiTietTask);
 
 			}
@@ -497,8 +514,10 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 		});
 
 		spnUser = (Spinner) dialog.findViewById(R.id.lst_nguoiton);
-		BaseSpinnerAdapter<NhanVien> adapterNhanVien = new BaseSpinnerAdapter<NhanVien>(context,
-				android.R.layout.simple_spinner_dropdown_item, lstNhanVien);
+		// MutilChoiceSpinnerAdapter<NhanVien> adapterNhanVien = new
+		// MutilChoiceSpinnerAdapter<NhanVien>(context,
+		// lstNhanVien);
+		BaseSpinnerAdapter<NhanVien> adapterNhanVien = new BaseSpinnerAdapter<NhanVien>(context, lstNhanVien);
 		adapterNhanVien.name = "TenNhanVien";
 		spnUser.setAdapter(adapterNhanVien);
 		spnUser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -509,15 +528,14 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 				nhanvien = (NhanVien) arg0.getAdapter().getItem(arg2);
 				int id = Integer.valueOf(nhanvien.getId());
 				nhanPhieuTask = new NhanPhieuTask();
-
-				nhanPhieuTask.input.add(thongTinBaoHong.getID_LanXPNT());
-				nhanPhieuTask.input.add(Util.userName);
-				nhanPhieuTask.input.add(id);
-				nhanPhieuTask.input.add(thongTinBaoHong.getID_TrangThai());
-				nhanPhieuTask.input.add(thongTinBaoHong.getID_LoaiDichVu());
-				nhanPhieuTask.input.add(thongTinBaoHong.getID_LoaiDichVuCT());
-				nhanPhieuTask.input.add(thongTinBaoHong.getID_Xuat());
-				nhanPhieuTask.input.add(Util.ttp.getId_ttpho());
+				nhanPhieuTask.addParam("phieuId", thongTinBaoHong.getID_LanXPNT());
+				nhanPhieuTask.addParam("userName", Util.userName);
+				nhanPhieuTask.addParam("nguoiNhanSuaId", id);
+				nhanPhieuTask.addParam("trangThaiId", thongTinBaoHong.getID_TrangThai());
+				nhanPhieuTask.addParam("loaiDichVuId", thongTinBaoHong.getID_LoaiDichVu());
+				nhanPhieuTask.addParam("loaiDichVuChiTietId", thongTinBaoHong.getID_LoaiDichVuCT());
+				nhanPhieuTask.addParam("xuatId", thongTinBaoHong.getID_Xuat());
+				nhanPhieuTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
 
 			}
 
@@ -595,4 +613,24 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 		dialog.show();
 
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		super.onClick(v);
+		switch (v.getId()) {
+		case R.id.bttTraPhieu:
+			TraPhieuWS traPhieuWS = new TraPhieuWS();
+			traPhieuWS.addParam("userName", Util.userName);
+			traPhieuWS.addParam("lanxpntId", thongTinBaoHong.getID_LanXPNT());
+			onExecuteToServer(true, null, traPhieuWS);
+
+			break;
+
+		default:
+			break;
+		}
+	}
+
 }

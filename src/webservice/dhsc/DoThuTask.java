@@ -15,9 +15,10 @@ public class DoThuTask extends BaseTask {
 		headerTitle = "AuthHeader";
 		pUserLabel = "Username";
 		pPassLabel = "Password";
-		para.add("p_id_loaidichvu"); // <p_id_loaidichvu>int</p_id_loaidichvu>
-		para.add("p_ma_dichvu"); // <p_ma_dichvu>string</p_ma_dichvu>
-		para.add("id_ttpho"); // <id_ttpho>int</id_ttpho>
+		// para.add("p_id_loaidichvu"); //
+		// <p_id_loaidichvu>int</p_id_loaidichvu>
+		// para.add("p_ma_dichvu"); // <p_ma_dichvu>string</p_ma_dichvu>
+		// para.add("id_ttpho"); // <id_ttpho>int</id_ttpho>
 
 	}
 

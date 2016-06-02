@@ -1,5 +1,7 @@
 package webservice.dhsc;
 
+import org.ksoap2.serialization.SoapObject;
+
 import webservice.BaseTask;
 
 public class NhanPhieuTask extends BaseTask {
@@ -13,15 +15,15 @@ public class NhanPhieuTask extends BaseTask {
 
 		User_WS = "wscskh";
 		Pass_WS = "wscskh@456";
-		headerTitle = "AuthHeader";
-		para.add("phieuId");
-		para.add("userName");
-		para.add("nguoiNhanSuaId");
-		para.add("trangThaiId");
-		para.add("loaiDichVuId");
-		para.add("loaiDichVuChiTietId");
-		para.add("xuatId");
-		para.add("tinhThanhPhoId");
+		headerTitle = "AuthHeaderDhscTtp";
+	}
+
+	@Override
+	public Object getResult() {
+		// TODO Auto-generated method stub
+		SoapObject reObjet = (SoapObject) result;
+		erros = reObjet.getPropertyAsString("IsError");
+		return reObjet.getPropertyAsString("Message");
 	}
 
 }

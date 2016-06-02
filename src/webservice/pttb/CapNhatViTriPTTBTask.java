@@ -12,10 +12,10 @@ public class CapNhatViTriPTTBTask extends BaseTask {
 		METHOD_NAME = "ThemMoiThueBaoViTriPTTB_new";
 		NAMESPACE = "http://tempuri.org/";
 		WSDL = "http://123.16.191.37/WSCSDLViTri/WSCSDLViTri/WSCDLViTri.asmx?WSDL";
-		para.add("eidLoaiDoiTuong");
-		para.add("user");
-		para.add("oThongTinThueBao");
-		para.add("oChiTietThueBao");
+		// para.add("eidLoaiDoiTuong");
+		// para.add("user");
+		// para.add("oThongTinThueBao");
+		// para.add("oChiTietThueBao");
 
 		// -------------------------------------//
 		paraObj.add("objThongTinThueBao");

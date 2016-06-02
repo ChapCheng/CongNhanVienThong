@@ -15,8 +15,8 @@ public class GetQuyenGTCAS extends BaseTask {
 		headerTitle = "AuthHeader";
 		pUserLabel = "Username";
 		pPassLabel = "Password";
-		para.add("ma_tinh_thanh");
-		para.add("user_name");
+		// para.add("ma_tinh_thanh");
+		// para.add("user_name");
 	}
 
 }

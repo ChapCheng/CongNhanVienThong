@@ -4,6 +4,7 @@ import com.congnhanvienthong.ActivityBaseToDisplay;
 import com.congnhanvienthong.R;
 import com.google.gson.Gson;
 import com.google.zxing.client.android.CaptureActivity;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -19,7 +20,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import congnhanvienthong.entity.qltt.ThongTinTraCuoc;
 import control.Util;
-import webservice.BaseTask;
 import webservice.WebProtocol;
 import webservice.qltt.PaymentManagementSearchingTask;
 
@@ -60,6 +60,10 @@ public class ActivityTraCuuNo extends ActivityBaseToDisplay {
 				Util.showAlert(context, thongTinTraCuoc.getErrorMessage());
 				return;
 			}
+			// ThongTinNo[] lst = thongTinTraCuoc.getThongTinNo();
+			// Collections.reverse(lst);
+			// thongTinTraCuoc.set
+			thongTinTraCuoc.setThongTinNoString();
 			Util.setTextFromObject(txtKetQua, thongTinTraCuoc);
 
 		} catch (Exception e) {
@@ -100,9 +104,9 @@ public class ActivityTraCuuNo extends ActivityBaseToDisplay {
 			String input = txtInput.getText().toString();
 			txtKetQua.setText("");
 			managementSearchingTask = new PaymentManagementSearchingTask();
-			managementSearchingTask.input.add(input);
-			managementSearchingTask.input.add(kycuoc);
-			managementSearchingTask.input.add(Util.ttp.getMa_Ttp());
+			managementSearchingTask.addParam("value", input);
+			managementSearchingTask.addParam("cycle", kycuoc);
+			managementSearchingTask.addParam("province", Util.ttp.getMa_Ttp());
 			onExecuteToServer(true, "Tra cứu cước", managementSearchingTask);
 			break;
 		case R.id.btn_barcode:
@@ -121,11 +125,15 @@ public class ActivityTraCuuNo extends ActivityBaseToDisplay {
 		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == 0) {
 			if (resultCode == RESULT_OK) {
-				String res_for = intent.getStringExtra("SCAN_RESULT_FORMAT");
 				String res = intent.getStringExtra("SCAN_RESULT");
 				txtInput.setText(res);
 			}
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
 	}
 
 }

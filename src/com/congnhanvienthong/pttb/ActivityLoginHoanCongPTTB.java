@@ -72,8 +72,8 @@ public class ActivityLoginHoanCongPTTB extends ActivityBaseToDisplay {
 		setHeader("Hoàn công các dịch vụ");
 		this.context = ActivityLoginHoanCongPTTB.this;
 		getQuyenCapNhatTask = new GetQuyenCapNhatTask();
-		getQuyenCapNhatTask.input.add(Util.ttp.getMa_Ttp());
-		getQuyenCapNhatTask.input.add("caidat_dcpcaugiay");
+		getQuyenCapNhatTask.addParam("sMA_TINHTP", Util.ttp.getMa_Ttp());
+		getQuyenCapNhatTask.addParam("sUSER_XTTT", Util.userName);
 		onExecuteToServer(true, null, getQuyenCapNhatTask);
 		layDichVuVienThong_PTTBTask = new LayDichVuVienThong_PTTBTask();
 
@@ -131,9 +131,10 @@ public class ActivityLoginHoanCongPTTB extends ActivityBaseToDisplay {
 						// refreshView.setShowViewWhileRefreshing(false);
 						layDanhSachMaThiCongTask = new LayDanhSachMaThiCongTask();
 						Role role = (Role) spnSelectRole.getSelectedItem();
-						layDanhSachMaThiCongTask.input.add(Util.ttp.getMa_Ttp());
-						layDanhSachMaThiCongTask.input.add(String.valueOf(radiogroup.getCheckedRadioButtonId()));
-						layDanhSachMaThiCongTask.input.add(role.getMA_NGUOI_DUNG());
+						layDanhSachMaThiCongTask.addParam("sMA_TINHTP", Util.ttp.getMa_Ttp());
+						layDanhSachMaThiCongTask.addParam("sDICHVUVT_ID",
+								String.valueOf(radiogroup.getCheckedRadioButtonId()));
+						layDanhSachMaThiCongTask.addParam("sMA_QUYEN_CD", role.getMA_NGUOI_DUNG());
 						showDialog = false;
 						thongbao.setText("Loading............");
 						task.execute(layDanhSachMaThiCongTask);
@@ -182,9 +183,9 @@ public class ActivityLoginHoanCongPTTB extends ActivityBaseToDisplay {
 						Task task = new Task();
 						layDanhSachMaThiCongTask = new LayDanhSachMaThiCongTask();
 						Role role = (Role) spnSelectRole.getSelectedItem();
-						layDanhSachMaThiCongTask.input.add(Util.ttp.getMa_Ttp());
-						layDanhSachMaThiCongTask.input.add(checkedId);
-						layDanhSachMaThiCongTask.input.add(role.getMA_NGUOI_DUNG());
+						layDanhSachMaThiCongTask.addParam("sMA_TINHTP", Util.ttp.getMa_Ttp());
+						layDanhSachMaThiCongTask.addParam("sDICHVUVT_ID", checkedId);
+						layDanhSachMaThiCongTask.addParam("sMA_QUYEN_CD", role.getMA_NGUOI_DUNG());
 
 						task.execute(layDanhSachMaThiCongTask);
 					}
@@ -215,9 +216,9 @@ public class ActivityLoginHoanCongPTTB extends ActivityBaseToDisplay {
 		case R.id.bttOK:
 			Role role = (Role) spnSelectRole.getSelectedItem();
 			layDanhSachMaThiCongTask = new LayDanhSachMaThiCongTask();
-			layDanhSachMaThiCongTask.input.add(Util.ttp.getMa_Ttp());
-			layDanhSachMaThiCongTask.input.add(0);
-			layDanhSachMaThiCongTask.input.add(role.getMA_NGUOI_DUNG());
+			layDanhSachMaThiCongTask.addParam("sMA_TINHTP", Util.ttp.getMa_Ttp());
+			layDanhSachMaThiCongTask.addParam("sDICHVUVT_ID", 0);
+			layDanhSachMaThiCongTask.addParam("sMA_QUYEN_CD", role.getMA_NGUOI_DUNG());
 			onExecuteToServer(true, null, layDanhSachMaThiCongTask);
 			onExecuteToServer(true, null, layDichVuVienThong_PTTBTask);
 
