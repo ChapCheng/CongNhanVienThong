@@ -4,62 +4,59 @@ import java.io.Serializable;
 
 import control.AnnotationField;
 
-
 @SuppressWarnings("serial")
-//@AnnotationClass(id = "ID_Xuat", name = "ID_NguoiNhanSua")
+// @AnnotationClass(id = "ID_Xuat", name = "ID_NguoiNhanSua")
 public class ThongTinBaoHong implements Serializable {
 	/**
 	 * 
 	 */
 
-	 // các trường hiển thị
+	// các trường hiển thị
 
+	// hiển thị = true : hiển thị sẵn, không phải ở phần ẩn hiện. Tên nhãn :
+	// nhãn trước giá trị value cần hiện thị. Oreder : thứ tự hiển thị của
+	// trường này
+	private String ID_Ton;
 	@AnnotationField(hienthi = true, tenNhan = "Mã V.Tinh", order = 0)
 	private String Ma_VT;
 
 	@AnnotationField(hienthi = true, tenNhan = "Tên tắt", order = 1)
-	 String Ten_Tat;
+	String Ten_Tat;
 
 	@AnnotationField(hienthi = true, tenNhan = "Mã D.Vụ", order = 2)
-	 String Ma_DichVu;
-	
-	//các trường không hiển thị
+	String Ma_DichVu;
+
+	// các trường không hiển thị
 
 	@AnnotationField(hienthi = false, tenNhan = "Ngày xuất", order = 2)
-	 String Ngay_Xuat;
+	String Ngay_Xuat;
 	@AnnotationField(hienthi = false, tenNhan = "Tên T.bao", order = 2)
-	 String Ten_TB;
+	String Ten_TB;
 	@AnnotationField(hienthi = false, tenNhan = "Đ.Chỉ T.bao", order = 2)
-	 String DChi_TB;
+	String DChi_TB;
 
-	String ID_LanXPNT, ID_Xuat, Ten_VT, Ten_Account, DienThoai_LapDat, ND_Xuat,
-			Nguoi_LHe, SoMay_LHe, Ngay_NhanSua, Nd_Ton, ID_VungSC, Dan_Tem,
-			ID_LoaiDichVu, TGMLL, Hong_Lai, So_LanBao, So_LanNhacPhieu,
-			Nguoi_NhanSua, ID_NguoiNhanSua, ID_NhomSua, Ton_Qua_3h,
-			 ID_LoaiDichVuCT, ID_BaoHong, ID_PhieuSua, ID_VT,
-			ID_TrangThai;
+	String ID_LanXPNT, ID_Xuat, Ten_VT, Ten_Account, DienThoai_LapDat, Nguoi_LHe, SoMay_LHe, Ngay_NhanSua, Nd_Ton,
+			ID_VungSC, Dan_Tem, ID_LoaiDichVu, TGMLL, Hong_Lai, So_LanBao, So_LanNhacPhieu, Nguoi_NhanSua,
+			ID_NguoiNhanSua, ID_NhomSua, Ton_Qua_3h, ID_LoaiDichVuCT, ID_BaoHong, ID_PhieuSua, ID_VT, ID_TrangThai;
+	@AnnotationField(hienthi = true, tenNhan = "N.D xuất phiếu", order = 3)
 
+	String ND_Xuat;
 	private String ID_NhomTon;
 
-	 int pTotalRecord;
-	 private boolean isAllowNhan,isAllowTon,isAllowKhoa,isNghiemThu;
+	int pTotalRecord;
+	private boolean isAllowNhan, isAllowTon, isAllowKhoa, isNghiemThu;
 
 	public ThongTinBaoHong() {
 		super();
 	}
 
-	public ThongTinBaoHong(String iD_TrangThai, String iD_LanXPNT,
-			String ma_VT, String ten_VT, String ten_Tat, String ma_DichVu,
-			String ten_Account, String dienThoai_LapDat, String ngay_Xuat,
-			String nD_Xuat, String nguoi_LHe, String soMay_LHe, String ten_TB,
-			String dChi_TB, String ngay_NhanSua, String nd_Ton,
-			String iD_VungSC, String dan_Tem, String iD_LoaiDichVu,
-			String tGMLL, String hong_Lai, String so_LanBao,
-			String so_LanNhacPhieu, String Nguoi_NhanSua,
-			String ID_NguoiNhanSua, String ID_NhomSua, String Ton_Qua_3h,
-			boolean isAllowKhoa, String ID_Xuat, String ID_LoaiDichVuCT,
-			String ID_BaoHong, String ID_PhieuSua, String ID_VT,
-			boolean isAllowTon) {
+	public ThongTinBaoHong(String iD_TrangThai, String iD_LanXPNT, String ma_VT, String ten_VT, String ten_Tat,
+			String ma_DichVu, String ten_Account, String dienThoai_LapDat, String ngay_Xuat, String nD_Xuat,
+			String nguoi_LHe, String soMay_LHe, String ten_TB, String dChi_TB, String ngay_NhanSua, String nd_Ton,
+			String iD_VungSC, String dan_Tem, String iD_LoaiDichVu, String tGMLL, String hong_Lai, String so_LanBao,
+			String so_LanNhacPhieu, String Nguoi_NhanSua, String ID_NguoiNhanSua, String ID_NhomSua, String Ton_Qua_3h,
+			boolean isAllowKhoa, String ID_Xuat, String ID_LoaiDichVuCT, String ID_BaoHong, String ID_PhieuSua,
+			String ID_VT, boolean isAllowTon) {
 		super();
 		ID_TrangThai = iD_TrangThai;
 		ID_LanXPNT = iD_LanXPNT;
@@ -103,7 +100,7 @@ public class ThongTinBaoHong implements Serializable {
 
 	public void setID_TrangThai(String iD_TrangThai) {
 		ID_TrangThai = iD_TrangThai;
-		
+
 	}
 
 	public String getID_LanXPNT() {
@@ -400,6 +397,14 @@ public class ThongTinBaoHong implements Serializable {
 
 	public void setID_NhomTon(String iD_NhomTon) {
 		ID_NhomTon = iD_NhomTon;
+	}
+
+	public String getID_Ton() {
+		return ID_Ton;
+	}
+
+	public void setID_Ton(String iD_Ton) {
+		ID_Ton = iD_Ton;
 	}
 
 }

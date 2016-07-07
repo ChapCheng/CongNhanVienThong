@@ -2,8 +2,6 @@
 <resources>
 
     <string name="app_name">VNPT-360</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
 
     <string-array name="marray">
         <item>India</item>

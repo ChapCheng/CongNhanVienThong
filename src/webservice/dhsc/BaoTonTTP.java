@@ -1,5 +1,7 @@
 package webservice.dhsc;
 
+import org.ksoap2.serialization.SoapObject;
+
 import control.Util;
 import webservice.BaseTask;
 
@@ -24,6 +26,13 @@ public class BaoTonTTP extends BaseTask {
 	@Override
 	public Object getResult() {
 		// TODO Auto-generated method stub
-		return result;
+		try {
+			SoapObject kq = (SoapObject) result;
+			return kq.getPrimitivePropertySafelyAsString("Message");
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "Có lỗi xảy ra";
+		}
+
 	}
 }

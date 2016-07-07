@@ -10,15 +10,16 @@
         android:background="@layout/border"
         android:orientation="horizontal" >
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/txt_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
+             android:scrollHorizontally="true"
             android:background="@android:color/transparent"
-            android:hint="Nhập địa chỉ" />
+            android:hint="Nhập thông tin" />
 
         <Button
             android:id="@+id/btn_tim"
@@ -28,6 +29,8 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="3dp"
+            android:singleLine="false"
+            android:lines="4"
             android:background="@drawable/btn_timkiem_tranfe"
             android:drawableTop="@drawable/find"
             android:gravity="center" />

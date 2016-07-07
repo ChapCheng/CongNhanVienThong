@@ -50,9 +50,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:clickable="true"
-                android:background="@drawable/refresh"
                 android:layout_marginRight="5dp"
+                android:background="@drawable/refresh"
+                android:clickable="true"
                 android:visibility="gone" />
         </RelativeLayout>
 
@@ -138,6 +138,15 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/headView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/transparent" >
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/body"

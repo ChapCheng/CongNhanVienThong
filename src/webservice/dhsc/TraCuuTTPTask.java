@@ -28,6 +28,8 @@ public class TraCuuTTPTask extends BaseTask {
 	public Object getResult() {
 		// TODO Auto-generated method stub
 		SoapObject lstObject = (SoapObject) ((SoapObject) result).getProperty("Result");
+		if (!Util.ttp.getId_ttpho().equals("1") && lstObject.getPropertyCount() > 0)
+			lstObject = (SoapObject) lstObject.getProperty(0);
 		ThongTinDichVu thongTinDichVu = new ThongTinDichVu();
 		Util.GetObjectFromSoapObject(thongTinDichVu, lstObject);
 		return thongTinDichVu;

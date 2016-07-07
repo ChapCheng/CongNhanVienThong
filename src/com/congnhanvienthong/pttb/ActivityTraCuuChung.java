@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 import com.congnhanvienthong.ActivityBaseToDisplay;
 import com.congnhanvienthong.R;
+import com.congnhanvienthong.dhsc.ActivityBaoHongTTP;
 
 import adapter.BaseListViewAdapter;
 import adapter.BaseSpinnerAdapter;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,13 +27,14 @@ import webservice.WebProtocol;
 import webservice.tracuuchung.DanhMucCheDoSapXepTask;
 import webservice.tracuuchung.DanhMucKieuTimKiemTask;
 import webservice.tracuuchung.TraCuuChungTask;
+//import android.support.design.widget.FloatingActionButton;
 
 public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 	Spinner spnKieuTimKiem, spnKieuSapXep;
 	ArrayList<KieuSapXep> lstKieuSapXepObj;
 	ArrayList<KieuTimKiem> lstKieuTimKiemObj;
 	ArrayList<ThongTinTraCuuChung> lstThongTinTraCuuChungObj;
-	Button btnOK, btnClose;
+	Button btnOK, btnClose, btnBaoHong;
 	DanhMucCheDoSapXepTask danhMucKieuSapXepTask;
 	DanhMucKieuTimKiemTask danhMucKieuTimKiemTask;
 	TraCuuChungTask tracuuTask;
@@ -43,6 +44,7 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 	TextView txtLabel;
 	Dialog dialog;
 	TextView txtDetail, txtInfor;
+	ThongTinTraCuuChung thongtin;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +57,6 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 		btnOK.setOnClickListener(this);
 		setHeader("Tra cứu chung");
 		lstKetQua = (ListView) body.findViewById(R.id.lstData);
-		// txtInfor = new TextView(this);
-		// txtInfor.setLayoutParams(new
-		// Gallery.LayoutParams(LayoutParams.WRAP_CONTENT,
-		// LayoutParams.WRAP_CONTENT));
 		txtTimKiem = (EditText) body.findViewById(R.id.inputData);
 		danhMucKieuSapXepTask = new DanhMucCheDoSapXepTask();
 		danhMucKieuTimKiemTask = new DanhMucKieuTimKiemTask();
@@ -71,18 +69,25 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 		dialog.setTitle("Thông tin chi tiết");
 		txtDetail = (TextView) dialog.findViewById(R.id.ketqua);
 		btnClose = (Button) dialog.findViewById(R.id.btnClose);
+		btnBaoHong = (Button) dialog.findViewById(R.id.btnBaoHong);
+		btnBaoHong.setOnClickListener(this);
 		btnClose.setOnClickListener(this);
-		lstKetQua.setOnItemClickListener(new OnItemClickListener() {
+		try {
+			lstKetQua.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				ThongTinTraCuuChung thongtin = (ThongTinTraCuuChung) parent.getAdapter().getItem(position);
-				Util.setTextFromObjectAllField(txtDetail, thongtin);
-				dialog.show();
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					// TODO Auto-generated method stub
 
-			}
-		});
+					thongtin = (ThongTinTraCuuChung) parent.getAdapter().getItem(position);
+					Util.setTextFromObjectAllField(txtDetail, thongtin);
+					dialog.show();
+
+				}
+			});
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
 	}
 
@@ -110,12 +115,8 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 				adapter = new BaseListViewAdapter<ThongTinTraCuuChung>(context, lstThongTinTraCuuChungObj, true);
 				lstKetQua.setAdapter(adapter);
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
-
-			// txtInfor.setText("Có tổng số " + lstThongTinTraCuuChungObj.size()
-			// + " phù hợp.");
 
 		}
 
@@ -151,6 +152,66 @@ public class ActivityTraCuuChung extends ActivityBaseToDisplay {
 			break;
 		case R.id.btnClose:
 			dialog.dismiss();
+			break;
+		case R.id.btnBaoHong:
+			String maDV = "";
+			if (thongtin != null) {
+				int loaiDV = 0;
+				maDV = thongtin.getMaThueBao();
+				Intent intent = new Intent(ActivityTraCuuChung.this, ActivityBaoHongTTP.class);
+
+				switch (thongtin.getDichVuVienThongId()) {
+				case 1:
+					loaiDV = 100;
+					break;
+				case 4:
+					loaiDV = 30;
+					break;
+				case 6:
+					loaiDV = 20;
+					if (thongtin.getMaThueBao().contains("(")) {
+						int start = thongtin.getMaThueBao().indexOf("(");
+						int end = thongtin.getMaThueBao().indexOf(")");
+						maDV = thongtin.getMaThueBao().substring(start + 1, end);
+					}
+					break;
+				case 7:
+					loaiDV = 20;
+					break;
+				case 8:
+					loaiDV = 80;
+					break;
+				case 9:
+					loaiDV = 50;
+					if (thongtin.getMaThueBao().contains("(")) {
+						// int start = thongtin.getMaThueBao().indexOf("(");
+						int end = thongtin.getMaThueBao().indexOf("(");
+						maDV = thongtin.getMaThueBao().substring(0, end);
+					}
+					break;
+				case 10:
+					loaiDV = 50;
+					break;
+				case 13:
+					loaiDV = 100;
+					break;
+				case 14:
+					loaiDV = 91;
+					break;
+				case 27:
+					loaiDV = 60;
+					break;
+				default:
+					break;
+				}
+				Bundle bundle = new Bundle();
+				bundle.putString("maDV", maDV.trim());
+				bundle.putInt("loaiDV", loaiDV);
+				intent.putExtras(bundle);
+				startActivity(intent);
+				dialog.dismiss();
+				finish();
+			}
 			break;
 
 		}

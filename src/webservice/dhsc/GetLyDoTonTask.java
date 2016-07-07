@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.ksoap2.serialization.SoapObject;
 
-import congnhanvienthong.entity.dhsc.LoaiSua;
 import congnhanvienthong.entity.dhsc.LyDoTon;
 import control.Util;
 import webservice.BaseTask;

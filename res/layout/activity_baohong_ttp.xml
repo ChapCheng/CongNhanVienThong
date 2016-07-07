@@ -97,12 +97,20 @@
                 android:hint="Nhap vao day"
                 android:singleLine="true" />
 
-            <CheckBox
-                android:id="@+id/check_khan"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Check Khẩn" >
-            </CheckBox>
+                android:text="Ngày hẹn"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/ngayhen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="Nhap vao day"
+                android:inputType="none"
+                android:singleLine="true" />
         </LinearLayout>
     </ScrollView>
 

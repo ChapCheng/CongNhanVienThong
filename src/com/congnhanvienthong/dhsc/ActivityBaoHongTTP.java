@@ -1,5 +1,7 @@
 package com.congnhanvienthong.dhsc;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import org.ksoap2.serialization.SoapObject;
@@ -8,10 +10,14 @@ import com.congnhanvienthong.ActivityBaseToDisplay;
 import com.congnhanvienthong.R;
 
 import adapter.BaseSpinnerAdapter;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import congnhanvienthong.entity.dhsc.LoaiDichVu;
@@ -29,7 +35,8 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 	NhanBaoHongTTPTask nhanBaoHongTTPTask;
 	Button bttOK;
 	NoiDungHong ndBaoHong;
-	EditText txtMaDichVu, txtAcc, txtNoiDungHong, txtLienHe, txtTenLienHe;
+	EditText txtMaDichVu, txtAcc, txtNoiDungHong, txtLienHe, txtTenLienHe, txtNgayHen;
+	private DatePickerDialog date;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,8 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 		txtNoiDungHong = (EditText) body.findViewById(R.id.inputnd_hong);
 		txtLienHe = (EditText) body.findViewById(R.id.inputLienHe);
 		txtTenLienHe = (EditText) body.findViewById(R.id.input_tenlienhe);
+		txtNgayHen = (EditText) body.findViewById(R.id.ngayhen);
+		txtNgayHen.setOnClickListener(this);
 		if (Util.ttp.getId_ttpho().equals("1")) {
 			txtAcc.setVisibility(View.GONE);
 		}
@@ -65,6 +74,8 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 				getNoiDungBaoHongTask = new GetNoiDungBaoHongTask();
 				getNoiDungBaoHongTask.addParam("dichVuId", ldv.getIdLoaiDichvu());
 				getNoiDungBaoHongTask.addParam("userName", Util.userName);
+				if (!Util.ttp.getId_ttpho().equals("1"))
+					getNoiDungBaoHongTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
 				onExecuteToServer(true, null, getNoiDungBaoHongTask);
 
 			}
@@ -75,6 +86,25 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 
 			}
 		});
+		Bundle bundle = getIntent().getExtras();
+
+		if (bundle != null) {
+
+			String maDV = bundle.getString("maDV");
+			if (maDV != null && maDV != "") {
+				txtMaDichVu.setText(maDV);
+			}
+			int loaiDV = bundle.getInt("loaiDV");
+			if (loaiDV != 0) {
+				// spnLoaiDichVu
+				for (int i = 0; i < lstLoaiDichVU.size(); i++) {
+					if (lstLoaiDichVU.get(i).getIdLoaiDichvu() == loaiDV)
+						spnLoaiDichVu.setSelection(i);
+
+				}
+			}
+
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -90,10 +120,13 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 		if (task.equals(nhanBaoHongTTPTask)) {
 			try {
 				SoapObject temp = (SoapObject) nhanBaoHongTTPTask.result;
-				String res = Util.GetData(temp, context, String.class, "IsError", "Message", "Result");
-				Util.showAlert(context, res);
+				String mess = (String) temp.getPrimitivePropertyAsString("Message");
+				// Util.GetData(temp, context, String.class, "IsError",
+				// "Message", "Result");
+				Util.showAlert(context, mess);
 			} catch (Exception e) {
 				// TODO: handle exception
+
 			}
 		}
 
@@ -157,12 +190,36 @@ public class ActivityBaoHongTTP extends ActivityBaseToDisplay {
 					txtAcc.setVisibility(View.GONE);
 					nhanBaoHongTTPTask.removeParam("tinhThanhPhoId");
 					nhanBaoHongTTPTask.removeParam("tenAccount");
-					nhanBaoHongTTPTask.addParam("isBaoHongAo", true);
-					nhanBaoHongTTPTask.addParam("loaiKhachHangId", "0");
+					nhanBaoHongTTPTask.removeParam("gioHen");
+
+					nhanBaoHongTTPTask.addParam("ngayHen", txtNgayHen.getText().toString());
 				}
 				onExecuteToServer(true, "Xác nhận báo hỏng!", nhanBaoHongTTPTask);
 			}
 
+			break;
+		case R.id.ngayhen:
+			Time today = new Time(Time.getCurrentTimezone());
+			today.setToNow();
+			txtNgayHen.setText("");
+			int month = today.month;
+			int year = today.year;
+
+			date = new DatePickerDialog(context, new OnDateSetListener() {
+
+				@Override
+				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+					// TODO Auto-generated method stub
+					int m = 0;
+					m = monthOfYear + 1;
+					NumberFormat formatter = new DecimalFormat("00");
+					String s = formatter.format(m); // ----> 01
+					txtNgayHen.setText(dayOfMonth + "/" + s + "/" + year);
+				}
+			}, year, month, 10);
+
+			if (!date.isShowing())
+				date.show();
 			break;
 
 		default:

@@ -6,9 +6,6 @@ import java.util.Vector;
 
 import org.ksoap2.serialization.SoapObject;
 
-import webservice.BaseTask;
-import webservice.WebProtocol;
-import webservice.dhsc.LayListDichVuTask;
 import adapter.BaseSpinnerAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,6 +21,8 @@ import congnhanvienthong.entity.dhsc.LoaiDichVu;
 import congnhanvienthong.entity.dhsc.NghiepVu;
 import congnhanvienthong.entity.dhsc.TinhThanhPho;
 import control.Util;
+import webservice.WebProtocol;
+import webservice.dhsc.LayListDichVuTask;
 
 public class ActivityChonTinhThanhPho extends ActivityBaseToDisplay {
 	ArrayList<TinhThanhPho> lstTinhThanhPho;

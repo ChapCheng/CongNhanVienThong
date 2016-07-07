@@ -219,6 +219,7 @@ public class ActivityLoginTD extends ActivityBaseToDisplay {
 				Intent i = new Intent(ActivityLoginTD.this, ActivityProfileTD.class);
 				unregisterReceiver(broadCast);
 				Util.userName = userName;
+				Util.pass = passWorrd;
 				TinhThanhPho tt = new TinhThanhPho();
 				tt.setTen_ttpho("Hà Nội");
 				tt.setId_ttpho("1");
@@ -233,6 +234,8 @@ public class ActivityLoginTD extends ActivityBaseToDisplay {
 				Intent i = new Intent(ActivityLoginTD.this, ActivityProfileTD.class);
 				unregisterReceiver(broadCast);
 				Util.userName = userName;
+				Util.pass = passWorrd;
+
 				Util.ttp = lstTinhThanhPhos.get(0);
 				startActivity(i);
 				finish();
@@ -243,6 +246,7 @@ public class ActivityLoginTD extends ActivityBaseToDisplay {
 				i.putExtra("lstTTP", lstTinhThanhPhos);
 				unregisterReceiver(broadCast);
 				Util.userName = userName;
+				Util.pass = passWorrd;
 				startActivity(i);
 				finish();
 			}

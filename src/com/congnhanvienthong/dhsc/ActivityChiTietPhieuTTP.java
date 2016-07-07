@@ -11,13 +11,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import adapter.BaseSpinnerAdapter;
-import adapter.MutilChoiceSpinnerAdapter;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +28,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ import webservice.dhsc.KhoaPhieuTTP;
 import webservice.dhsc.ListNhanVienTask;
 import webservice.dhsc.NhanPhieuTask;
 import webservice.dhsc.ThemMoiViTriDHSCTask;
+import webservice.dhsc.TraCuuTTPTask;
 import webservice.dhsc.TraPhieuWS;
 
 public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
@@ -74,20 +76,25 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 
 	GetLoaiSuaChiTietTask getLoaiSuaChiTietTask;
 	NhanPhieuTask nhanPhieuTask; // not ok
-	Button buttonExit, buttonOK;
+	Button buttonExit, buttonOK, btnClose, btnBaoHong, btnCall;
 	NhanVien nhanvien;
 	private GoogleMap map;
+	ProgressBar progressBar;
 
 	public static int NHAN_TYPE = 0;
 	public static int TON_TYPE = 1;
 	public static int KHOA_TYPE = 2;
-	LinearLayout lineuser, lineloaisua, lineloaisuachitiet, linenghiemthu, lineton, linendsuachitiet;
+	LinearLayout lineuser, lineloaisua, lineloaisuachitiet, linenghiemthu, lineton, linendsuachitiet,
+			viewThongTinDichVu;
 	ScrollView scrollViewMain;
 	ThemMoiViTriDHSCTask themMoiViTriDHSCTask = new ThemMoiViTriDHSCTask();
 	LocationManager locationManager;
 	// ---Ok----
 	boolean isGPSEnabled;
 	CheckBox cbxLocation;
+	TraCuuTTPTask traCuuTask = new TraCuuTTPTask();
+	Dialog dia;
+	TextView txtKetQua;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -182,9 +189,12 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 
 						ndGoc = ndNghiemThu + txtNoiDungNghiemThu.getText().toString();
 						khoaPhieuDHSCTask = new KhoaPhieuTTP();
-
-						khoaPhieuDHSCTask.setDataInput(thongTinBaoHong, loaiSua, loaiSuaChiTiet, loaiNghiemThu, ndSua,
-								ndSuaChitiet, ndNghiemThu, ndGoc, nhanvien);
+						if (Util.ttp.getId_ttpho().equals("1")) {
+							khoaPhieuDHSCTask.setDataInputHNI(thongTinBaoHong, loaiSua, loaiSuaChiTiet, loaiNghiemThu,
+									ndSua, ndSuaChitiet, ndNghiemThu, ndGoc, nhanvien);
+						} else
+							khoaPhieuDHSCTask.setDataInput(thongTinBaoHong, loaiSua, loaiSuaChiTiet, loaiNghiemThu,
+									ndSua, ndSuaChitiet, ndNghiemThu, ndGoc, nhanvien);
 						Location loc = null;
 						if (map != null) {
 							loc = map.getMyLocation();
@@ -255,7 +265,7 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 							baoTonTask.addParam("loaiDichVuChiTietId", thongTinBaoHong.getID_LoaiDichVuCT());
 							baoTonTask.addParam("lanxpntId", thongTinBaoHong.getID_LanXPNT());
 							baoTonTask.addParam("xuatId", thongTinBaoHong.getID_Xuat());
-							baoTonTask.addParam("phieuId", thongTinBaoHong.getID_PhieuSua());
+							baoTonTask.addParam("phieuId", thongTinBaoHong.getID_LanXPNT());
 							baoTonTask.addParam("phieuSuaId", thongTinBaoHong.getID_PhieuSua());
 							baoTonTask.addParam("nguoiTonId", nhanvien.getId());
 							baoTonTask.addParam("userName", Util.userName);
@@ -302,7 +312,7 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 		if (task.equals(baoTonTask)) {
 
 			dialog.dismiss();
-			Util.showAlert(context, baoTonTask.result.toString());
+			Util.showAlert(context, baoTonTask.getResult().toString());
 
 		}
 		// Khoa phieu
@@ -342,6 +352,7 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 
 					Intent i = new Intent(context, ActivityNhanKhoaPhieuTTP.class);
 					startActivity(i);
+					finish();
 
 				}
 			});
@@ -374,6 +385,16 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 		}
 		if (task instanceof TraPhieuWS) {
 			Util.showAlert(context, task.getResult().toString());
+
+		}
+		if (task.equals(traCuuTask)) {
+
+			btnCall.setOnClickListener(this);
+			btnClose.setOnClickListener(this);
+			dia.setCancelable(true);
+			progressBar.setVisibility(View.GONE);
+			txtKetQua = (TextView) dia.findViewById(R.id.ketqua);
+			Util.setTextFromObject(txtKetQua, traCuuTask.getResult());
 
 		}
 	}
@@ -423,7 +444,7 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 		viewHonglai = (TextView) body.findViewById(R.id.chitietphieu_lannhac);
 		viewNgayXuat = (TextView) body.findViewById(R.id.chitietphieu_lienhe);
 		viewNoiDung = (TextView) body.findViewById(R.id.chitietphieu_noidungxuat);
-
+		viewThongTinDichVu = (LinearLayout) body.findViewById(R.id.viewThongTinDichVuChiTiet);
 		setFootLayout(R.layout.foot_activity_chi_tiet_phieu);
 		listNhanVienTask = new ListNhanVienTask();
 		listNhanVienTask.addParam("userName", Util.userName);
@@ -440,6 +461,7 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 		bttTra.setOnClickListener(this);
 		bttNhan.setText("Nhận");
 		refresh(thongTinBaoHong);
+		viewThongTinDichVu.setOnClickListener(this);
 
 	}
 
@@ -626,6 +648,43 @@ public class ActivityChiTietPhieuTTP extends ActivityBaseToDisplay {
 			traPhieuWS.addParam("lanxpntId", thongTinBaoHong.getID_LanXPNT());
 			onExecuteToServer(true, null, traPhieuWS);
 
+			break;
+		case R.id.viewThongTinDichVuChiTiet:
+			dia = new Dialog(context);
+			dia.setContentView(R.layout.tracuuchung_detail);
+			dia.setCancelable(true);
+			dia.setTitle("Thông tin chi tiết");
+			dia.setCancelable(false);
+			dia.show();
+			btnClose = (Button) dia.findViewById(R.id.btnClose);
+			btnBaoHong = (Button) dia.findViewById(R.id.btnBaoHong);
+			btnCall = (Button) dia.findViewById(R.id.btnCall);
+			btnCall.setVisibility(View.VISIBLE);
+			btnBaoHong.setVisibility(View.GONE);
+			progressBar = (ProgressBar) dia.findViewById(R.id.prbLayThongTin);
+			progressBar.setVisibility(View.VISIBLE);
+			traCuuTask.addParam("maDichVu", thongTinBaoHong.getMa_DichVu().trim());
+			traCuuTask.addParam("loaiDichVuId", thongTinBaoHong.getID_LoaiDichVu());
+
+			traCuuTask.addParam("userName", Util.userName);
+			traCuuTask.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
+			if (Util.ttp.getId_ttpho().equals("1")) {
+				traCuuTask.removeParam("userName");
+				traCuuTask.removeParam("tinhThanhPhoId");
+
+			}
+			onExecuteToServer(false, null, traCuuTask);
+
+			break;
+		case R.id.btnClose:
+			dia.dismiss();
+			break;
+		case R.id.btnCall:
+			if (thongTinBaoHong != null && thongTinBaoHong.getSoMay_LHe() != "") {
+				Intent callIntent = new Intent(Intent.ACTION_CALL);
+				callIntent.setData(Uri.parse("tel:" + thongTinBaoHong.getSoMay_LHe()));
+				startActivity(callIntent);
+			}
 			break;
 
 		default:

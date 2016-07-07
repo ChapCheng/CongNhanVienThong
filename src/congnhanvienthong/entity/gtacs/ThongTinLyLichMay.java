@@ -3,8 +3,10 @@ package congnhanvienthong.entity.gtacs;
 import control.AnnotationField;
 
 public class ThongTinLyLichMay {
+	// do có trường MaDichVu trong file xml trả ra nên em tạo trường này. Module chạy sẽ tự tạo ra trường MaDichVu nếu có.
+	// có thể dùng với cả các class do anh tạo ra. Nếu ở đây em sửa thành MaDichVu1 thì ko lấy dc do ko có trong kết quả trả ra
 	@AnnotationField(hienthi = true, order = 1, tenNhan = "Mã Dịch Vụ")
-	String MaDichVu;
+	String MaDichVu;// như này là tèo
 	@AnnotationField(hienthi = true, order = 2, tenNhan = "Account")
 	String Account;
 	@AnnotationField(hienthi = true, order = 3, tenNhan = "Tên Loại Thiết Bị")
@@ -45,6 +47,8 @@ public class ThongTinLyLichMay {
 	String SPL_OLT;
 	@AnnotationField(hienthi = true, order = 20, tenNhan = "Tốc độ")
 	String Speed;
+	// đây là class trong class. Chỉ cần trùng tên là HoSoDauChuyenModel. Nếu ở đây khai sai tên 
+	// thì cũng tạch
 	@AnnotationField(hienthi = true, order = 21, tenNhan = "Hồ sơ đấu chuyển")
 	HoSoThanhThai HoSoDauChuyenModel;
 

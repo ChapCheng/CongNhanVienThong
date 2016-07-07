@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.congnhanvienthong.ActivityBaseToDisplay;
 import com.congnhanvienthong.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import adapter.BaseListViewAdapter;
@@ -12,6 +13,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -45,6 +49,8 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 	GetLoaiSuaTask getLoaiSuaTask;
 	GetLoaiNghiemThuTask getLoaiNghiemThuTask;
 	GetLyDoTonTask getLyDoTonTask;
+	AutoCompleteTextView edtMaDichVu;
+	Button bttSearch;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,12 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 			setBodyLayout(R.layout.activity_nhan_khoa_phieu);
 			setFootLayout(R.layout.foot_nhan_phieu);
 			setHeader("Nhận khoá phiếu");
+			if (Util.ttp.getId_ttpho().equals("1")) {
+				setHeadLayout(R.layout.layout_edittexxt_search);
+				edtMaDichVu = (AutoCompleteTextView) headView.findViewById(R.id.txt_search);
+				bttSearch = (Button) headView.findViewById(R.id.btn_tim);
+				bttSearch.setOnClickListener(this);
+			}
 			radiogroup = (RadioGroup) foot.findViewById(R.id.RadioGroup01);
 
 			radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -63,6 +75,8 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 				public void onCheckedChanged(RadioGroup group, int checkedId) {
 					// TODO Auto-generated method stub
 					Task task = new Task();
+					if (edtMaDichVu != null)
+						edtMaDichVu.setText("");
 					layListPhieuTTP = new LayListPhieuTTP();
 					layListPhieuTTP.addParam("userName", Util.userName);
 					layListPhieuTTP.addParam("loaiDichVuId", checkedId);
@@ -84,16 +98,10 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 				}
 			});
 			DisplayRadioButton();
-			// layListPhieuTTP = new LayListPhieuTTP();
-			// layListPhieuTTP.input.add(Util.userName);
-			// layListPhieuTTP.input.add(type);
-			// layListPhieuTTP.input.add("0");
-			// layListPhieuTTP.input.add(sophieulay);
-			// String value = !Util.ttp.getId_ttpho().equals("1") ?
-			// Util.ttp.getId_ttpho() : "";
-			// layListPhieuTTP.input.add(value);
 
 			layListPhieuTTP = new LayListPhieuTTP();
+			if (edtMaDichVu != null)
+				edtMaDichVu.setText("");
 			layListPhieuTTP.addParam("userName", Util.userName);
 			layListPhieuTTP.addParam("loaiDichVuId", type);
 			layListPhieuTTP.addParam("pStartRowIndex", "0");
@@ -131,7 +139,7 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 			}
 			listView = (PullToRefreshListView) body.findViewById(R.id.list_nhan_khoa_phieu);
 			totalInfor = (TextView) body.findViewById(R.id.so_phieu_hong);
-			// listView.setMode(Mode.BOTH);
+			listView.setMode(Mode.BOTH);
 			listView.onRefreshComplete();
 			listView.setAdapter(new BaseListViewAdapter<ThongTinBaoHong>(context, lstTHThongTinBaoHongs, null, false));
 			totalInfor.setText("Có tổng số " + total + " phiếu. ");
@@ -142,6 +150,8 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 				public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 					// TODO Auto-generated method stub
 					listView.setAdapter(null);
+					if (edtMaDichVu != null)
+						edtMaDichVu.setText("");
 					if (listView.getCurrentMode().equals(PullToRefreshBase.Mode.PULL_FROM_START)
 							&& lstTHThongTinBaoHongs.size() > sophieulay - 1)
 						index = index + sophieulay;
@@ -149,11 +159,13 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 							&& index > sophieulay - 1)
 						index = index - sophieulay;
 					// refreshView.setShowViewWhileRefreshing(false);
+					if (edtMaDichVu != null)
+						edtMaDichVu.setText("");
 					layListPhieuTTP = new LayListPhieuTTP();
 					layListPhieuTTP = new LayListPhieuTTP();
 					layListPhieuTTP.addParam("userName", Util.userName);
 					layListPhieuTTP.addParam("loaiDichVuId", type);
-					layListPhieuTTP.addParam("pStartRowIndex", 0);
+					layListPhieuTTP.addParam("pStartRowIndex", index);
 					layListPhieuTTP.addParam("pPageSize", sophieulay);
 					layListPhieuTTP.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
 					if (Util.ttp.getId_ttpho().equals("1")) {
@@ -246,5 +258,30 @@ public class ActivityNhanKhoaPhieuTTP extends ActivityBaseToDisplay {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		super.onClick(v);
+		switch (v.getId()) {
+		case R.id.btn_tim:
+			layListPhieuTTP = new LayListPhieuTTP();
+			layListPhieuTTP = new LayListPhieuTTP();
+			layListPhieuTTP.addParam("userName", Util.userName);
+			layListPhieuTTP.addParam("loaiDichVuId", type);
+			layListPhieuTTP.addParam("pStartRowIndex", 0);
+			layListPhieuTTP.addParam("pPageSize", sophieulay);
+			layListPhieuTTP.addParam("tinhThanhPhoId", Util.ttp.getId_ttpho());
+			if (Util.ttp.getId_ttpho().equals("1")) {
+				layListPhieuTTP.removeParam("tinhThanhPhoId");
+				layListPhieuTTP.addParam("maDichVu", edtMaDichVu.getText().toString());
+			}
+			onExecuteToServer(true, null, layListPhieuTTP);
+			break;
+
+		default:
+			break;
+		}
 	}
 }

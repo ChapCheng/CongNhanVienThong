@@ -1,5 +1,9 @@
 package webservice.gtcas;
 
+import org.ksoap2.serialization.SoapObject;
+
+import congnhanvienthong.entity.gtacs.ThongTinLyLichMay;
+import control.Util;
 import webservice.BaseTask;
 
 public class LyLichMayTask extends BaseTask {
@@ -15,8 +19,33 @@ public class LyLichMayTask extends BaseTask {
 		headerTitle = "AuthHeader";
 		pUserLabel = "Username";
 		pPassLabel = "Password";
-		// para.add("ma_dich_vu");
-		// para.add("ma_tinh_thanh");
+	}
+	@Override
+	public Object getResult() {
+		// TODO Auto-generated method stub
+		ThongTinLyLichMay thongTinLyLichMay = new ThongTinLyLichMay();
+		try {
+			
+			SoapObject arrString = (SoapObject) result;
+			String result = arrString.getPrimitivePropertyAsString("isError");
+			String mess = arrString.getPrimitivePropertyAsString("Message");
+			if (result.toLowerCase().equals("true")) {
+				Util.showAlert(context, mess);
+				return thongTinLyLichMay;
+			}
+			SoapObject lylichmay = (SoapObject) arrString.getProperty("Result");
+
+			
+
+			Util.GetObjectFromSoapObject(thongTinLyLichMay, lylichmay);
+			return thongTinLyLichMay;
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			Util.processException(e, context);
+			return thongTinLyLichMay;
+			
+		}
 	}
 
 }

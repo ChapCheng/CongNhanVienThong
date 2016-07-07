@@ -14,10 +14,7 @@ public class PaymentManagementSearchingTask extends BaseTask {
 		Pass_WS = Constant.PAYMENTSEARCH__HEADER_VALUE;
 		headerTitle = "Header";
 		WSDL = "http://123.16.191.37/PaymentManagementSearching/PaymentManagementSearching.asmx";
-		// para.add("value");
-		// para.add("cycle");
-		// para.add("province");
-		hidden = true ;
+		hidden = true;
 	}
 
 }

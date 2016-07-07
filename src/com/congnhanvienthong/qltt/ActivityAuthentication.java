@@ -1,6 +1,7 @@
 package com.congnhanvienthong.qltt;
 
 import webservice.qltt.PaymentsWebServices;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -23,8 +24,8 @@ import com.congnhanvienthong.R;
 import control.PreferenceConnector;
 import control.Util;
 
-public class ActivityAuthentication extends ActivityBaseToDisplay implements
-		AsyncResponse {
+@SuppressLint("NewApi")
+public class ActivityAuthentication extends ActivityBaseToDisplay implements AsyncResponse {
 
 	EditText edtAuthenticationString;
 	BroadcastReceiver receiver = null;
@@ -52,9 +53,7 @@ public class ActivityAuthentication extends ActivityBaseToDisplay implements
 
 			if (!sResult.equals("0")) {
 
-				Toast.makeText(getBaseContext(),
-						"Lấy chuỗi xác thực không thành công",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(), "Lấy chuỗi xác thực không thành công", Toast.LENGTH_SHORT).show();
 				finish();
 
 			} else {
@@ -67,8 +66,7 @@ public class ActivityAuthentication extends ActivityBaseToDisplay implements
 
 	private void initialize() {
 
-		final IntentFilter filter = new IntentFilter(
-				"android.provider.Telephony.SMS_RECEIVED");
+		final IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
 
 		receiver = new BroadcastReceiver() {
 
@@ -84,8 +82,7 @@ public class ActivityAuthentication extends ActivityBaseToDisplay implements
 		//
 		// Hiển thị Dialog để nhận chuỗi xác thực
 		//
-		AlertDialog.Builder builder = new AlertDialog.Builder(
-				ActivityAuthentication.this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(ActivityAuthentication.this);
 
 		builder.setTitle("Nhập chuỗi xác thực thanh toán");
 
@@ -93,40 +90,33 @@ public class ActivityAuthentication extends ActivityBaseToDisplay implements
 
 		builder.setView(edtAuthenticationString);
 
-		builder.setPositiveButton("Xác nhận",
-				new DialogInterface.OnClickListener() {
+		builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 
-						saveAuthenticationString();
-						finish();
-						Intent intent = new Intent(ActivityAuthentication.this,
-								ActivityTimKiemThanhToan.class);
-						startActivity(intent);
+				saveAuthenticationString();
+				finish();
+				Intent intent = new Intent(ActivityAuthentication.this, ActivityTimKiemThanhToan.class);
+				startActivity(intent);
 
-					}
-				});
+			}
+		});
 
-		builder.setNegativeButton("Thoát",
-				new DialogInterface.OnClickListener() {
+		builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 
-						finish();
-					}
-				});
+				finish();
+			}
+		});
 
 		builder.setCancelable(false);
 		builder.show();
 
 		String userName = Util.userName;
-		String password = PreferenceConnector.readString( ActivityAuthentication.this,
-				PreferenceConnector.PASS, null);
-		
-		
-		
+		String password = Util.pass;
 
 		authenticationAsync = new GetAuthenticationAsync(this);
 		authenticationAsync.execute(userName, password);
@@ -149,10 +139,10 @@ public class ActivityAuthentication extends ActivityBaseToDisplay implements
 
 			String body = smsMsg.getMessageBody();
 			String address = smsMsg.getOriginatingAddress();
-			if(address.equals("VNPT")){
+			if (address.equals("VNPT")) {
 				int length = body.length();
-				
-				String OTP = body.substring(length-4,length);
+
+				String OTP = body.substring(length - 4, length);
 				edtAuthenticationString.setText(OTP);
 			}
 		}
@@ -160,19 +150,16 @@ public class ActivityAuthentication extends ActivityBaseToDisplay implements
 
 	private void saveAuthenticationString() {
 
-		String authenticationString = edtAuthenticationString.getText()
-				.toString();
+		String authenticationString = edtAuthenticationString.getText().toString();
 		if (authenticationString.isEmpty()) {
 
-			Toast.makeText(this, "Chưa nhập chuỗi xác thực", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, "Chưa nhập chuỗi xác thực", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
 		else {
 
-			SharedPreferences sharedPref = getSharedPreferences(
-					Constants.FILE_AUTHENTICATION, Context.MODE_PRIVATE);
+			SharedPreferences sharedPref = getSharedPreferences(Constants.FILE_AUTHENTICATION, Context.MODE_PRIVATE);
 			SharedPreferences.Editor editor = sharedPref.edit();
 			editor.clear();
 			editor.putString(Constants.AUTHENTICATION_KEY, authenticationString);
@@ -199,8 +186,7 @@ class GetAuthenticationAsync extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPreExecute() {
 
-		progressDialog = ProgressDialog.show(context, "",
-				"Đang lấy chuỗi xác thực ...");
+		progressDialog = ProgressDialog.show(context, "", "Đang lấy chuỗi xác thực ...");
 
 	}
 

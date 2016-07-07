@@ -135,7 +135,7 @@ public class KetCuoi {
 			}
 			mko.icon(ketcuoiIcon);
 			mko.title(getM_OBJECT_NAME());
-			mko.draggable(setDrag);
+			mko.draggable(true);
 			if (showInfor) {
 				marker = map.addMarker(mko);
 				marker.showInfoWindow();
@@ -146,9 +146,10 @@ public class KetCuoi {
 
 		} catch (Exception e) {
 		}
-
+		setMarker(marker);
 		return marker;
 
 	}
+	
 
 }

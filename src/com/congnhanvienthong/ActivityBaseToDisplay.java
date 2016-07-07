@@ -4,12 +4,9 @@ import java.util.ArrayList;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.congnhanvienthong.dhsc.ACtivityTraCuuTTP;
 import com.congnhanvienthong.dhsc.ActivityBaoHongTTP;
-import com.congnhanvienthong.dhsc.ActivityDoThuTTP;
-import com.congnhanvienthong.dhsc.ActivityLyLichSuaChua;
 import com.congnhanvienthong.dhsc.ActivityNhanKhoaPhieuTTP;
-import com.congnhanvienthong.gtacs.ActivityLyLichMay;
+import com.congnhanvienthong.dhsc.ActivityTraCuuDV;
 import com.congnhanvienthong.gtacs.ActivityTraCuuKetCuoi;
 import com.congnhanvienthong.kdb.ActivityKhoanDiaBan;
 import com.congnhanvienthong.pttb.ActivityLoginHoanCongPTTB;
@@ -64,7 +61,7 @@ public class ActivityBaseToDisplay extends SherlockFragmentActivity
 	protected ActionBar ab;
 	protected Context context;
 	ProgressDialog mProgressDialog;
-	protected View body, foot;
+	protected View body, foot, headView;
 	TextView headerText;
 	ImageView buttonMenu;
 	Button shortcut1, shortcut2, shortcut3;
@@ -110,6 +107,7 @@ public class ActivityBaseToDisplay extends SherlockFragmentActivity
 		menu.setBehindWidth(wiMenu);
 		body = findViewById(R.id.body);
 		foot = findViewById(R.id.footer);
+		headView = findViewById(R.id.headView);
 		shortcutView = (LinearLayout) findViewById(R.id.test);
 
 		list = (ListView) findViewById(R.id.listView_main);
@@ -152,6 +150,7 @@ public class ActivityBaseToDisplay extends SherlockFragmentActivity
 									// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 									intent.addFlags(
 											Intent.FLAG_ACTIVITY_CLEAR_TOP | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 									intent.putExtra("EXIT", true);
 									finish();
 									System.exit(0);
@@ -238,12 +237,13 @@ public class ActivityBaseToDisplay extends SherlockFragmentActivity
 		items.add(new EntryItem("Hoàn công lắp đặt", ActivityLoginHoanCongPTTB.class, R.drawable.cap_nhat));
 		if (Util.isUserDHSC == true) {
 			items.add(new EntryItem("Nhận Báo Hỏng", ActivityBaoHongTTP.class, R.drawable.lock));
-			items.add(new EntryItem("Đo Thử", ActivityDoThuTTP.class, R.drawable.do_thu));
+			//items.add(new EntryItem("Đo Thử", ActivityDoThuTTP.class, R.drawable.do_thu));
 			items.add(new EntryItem("Khóa phiếu sửa chữa", ActivityNhanKhoaPhieuTTP.class, R.drawable.lock));
-			items.add(new EntryItem("Lý lịch sửa chữa", ActivityLyLichSuaChua.class, R.drawable.tracuu_dothu));
+//			items.add(new EntryItem("Lý lịch sửa chữa", ActivityLyLichSuaChua.class, R.drawable.tracuu_dothu));
 
-			items.add(new EntryItem("Tra cứu dịch vụ", ACtivityTraCuuTTP.class, R.drawable.tracuu_dothu));
-			items.add(new EntryItem("Lý lịch máy", ActivityLyLichMay.class, R.drawable.cap_nhat));
+			//items.add(new EntryItem("Tra cứu dịch vụ", ACtivityTraCuuTTP.class, R.drawable.tracuu_dothu));
+			//items.add(new EntryItem("Lý lịch máy", ActivityLyLichMay.class, R.drawable.cap_nhat));
+			items.add(new EntryItem("Thông tin dịch vụ", ActivityTraCuuDV.class, R.drawable.cap_nhat));
 		}
 		// Menu PTTB
 		if (true) {
@@ -270,7 +270,8 @@ public class ActivityBaseToDisplay extends SherlockFragmentActivity
 		items.add(new EntryItem("Khoán địa bàn", ActivityKhoanDiaBan.class, R.drawable.cap_nhat));
 		items.add(new EntryItem("Trợ giúp", ActivityHelpMenu.class, R.drawable.help));
 		items.add(new EntryItem("Tài khoản", ActivityProfileTD.class, R.drawable.account));
-		items.add(new EntryItem("Cường độ sóng", null, R.drawable.bts_icon_red));
+		// items.add(new EntryItem("Cường độ sóng", null,
+		// R.drawable.bts_icon_red));
 		items.add(new EntryItem("Thoát", null, R.drawable.exit));
 
 		Util.items = items;
@@ -295,6 +296,11 @@ public class ActivityBaseToDisplay extends SherlockFragmentActivity
 	public void setFootLayout(int id) {
 		((RelativeLayout) foot).removeAllViews();
 		((RelativeLayout) foot).addView(getLayoutInflater().inflate(id, null));
+	}
+
+	public void setHeadLayout(int id) {
+		((RelativeLayout) headView).removeAllViews();
+		((RelativeLayout) headView).addView(getLayoutInflater().inflate(id, null));
 	}
 
 	// -------setup phím tắt------------

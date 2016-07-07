@@ -1,7 +1,5 @@
 package api;
 
-import com.google.gson.Gson;
-
 import congnhanvienthong.entity.ListApiResult;
 import congnhanvienthong.entity.nhatram.LoaiNhaTram;
 
@@ -21,8 +19,6 @@ public class GetLoaiNhaTramApi extends ApiTask {
 	public Object getResult() {
 		// TODO Auto-generated method stub
 		LoaiNhaTram = new ListApiResult<LoaiNhaTram>();
-		Gson gson = new Gson();
-
 		return getList(LoaiNhaTram.class);
 	}
 

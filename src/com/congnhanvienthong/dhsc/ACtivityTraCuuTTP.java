@@ -153,6 +153,7 @@ public class ACtivityTraCuuTTP extends ActivityBaseToDisplay {
 					makerSearch.icon(ketcuoiIcon);
 					makerSearch.anchor(0.5f, 1.0f);
 					map.addMarker(makerSearch);
+					map.moveCamera(CameraUpdateFactory.newLatLngZoom(lat, 14));
 				}
 			} catch (Exception e) {
 				// TODO: handle exception

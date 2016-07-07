@@ -77,5 +77,11 @@
         <item>Nhà Trạm Viễn Thông</item>
         <item>Đối tượng quản lý mạng cáp</item>
     </string-array>
+    <string-array name="loai_tra_cuu">
+        <item>Lý lịch máy</item>
+        <item>Tra cứu trên ĐHSC</item>
+        <item >Tra cứu trên Vissa</item>
+        <item >Lý lịch sửa chữa</item>
+    </string-array>
 
 </resources>

@@ -32,6 +32,106 @@ public class ThongTinTraCuuChung {
 	int ThanhToanId;
 	int ThueBaoId;
 	int TinhTpId;
+	@AnnotationField(hienthi = false, order = 5, tenNhan = "Tên dịch vụ viễn thông")
+	String TrangThaiThueBao;
+	String MaDichVu;
+	String account;
+
+	public String getAccount() {
+		String maDV = getMaThueBao();
+		switch (getDichVuVienThongId()) {
+
+		case 9:
+			idLoaiDichVuDHSC = 50;
+			if (getMaThueBao().contains("(")) {
+				int start = getMaThueBao().indexOf("(");
+				int end = getMaThueBao().indexOf(")");
+				maDV = getMaThueBao().substring(start + 1, end);
+			}
+			break;
+
+		case 6:
+			idLoaiDichVuDHSC = 20;
+			if (getMaThueBao().contains("(")) {
+				int end = getMaThueBao().indexOf("(");
+				maDV = getMaThueBao().substring(0, end);
+			}
+			break;
+
+		}
+		return maDV;
+	}
+
+	int idLoaiDichVuDHSC;
+
+	public String getTrangThaiThueBao() {
+		return TrangThaiThueBao;
+	}
+
+	public int getIdLoaiDichVuDHSC() {
+		return idLoaiDichVuDHSC;
+	}
+
+	public void setIdLoaiDichVuDHSC(int idLoaiDichVuDHSC) {
+		this.idLoaiDichVuDHSC = idLoaiDichVuDHSC;
+	}
+
+	public void setTrangThaiThueBao(String trangThaiThueBao) {
+		TrangThaiThueBao = trangThaiThueBao;
+	}
+
+	public String getMaDichVu() {
+		String maDV = getMaThueBao();
+		switch (getDichVuVienThongId()) {
+		case 1:
+			idLoaiDichVuDHSC = 100;
+			break;
+		case 4:
+			idLoaiDichVuDHSC = 30;
+			break;
+		case 6:
+			idLoaiDichVuDHSC = 20;
+			if (getMaThueBao().contains("(")) {
+				int start = getMaThueBao().indexOf("(");
+				int end = getMaThueBao().indexOf(")");
+				maDV = getMaThueBao().substring(start + 1, end);
+			}
+			break;
+		case 7:
+			idLoaiDichVuDHSC = 20;
+			break;
+		case 8:
+			idLoaiDichVuDHSC = 80;
+			break;
+		case 9:
+			idLoaiDichVuDHSC = 50;
+			if (getMaThueBao().contains("(")) {
+				int end = getMaThueBao().indexOf("(");
+				maDV = getMaThueBao().substring(0, end);
+			}
+			break;
+		case 10:
+			idLoaiDichVuDHSC = 50;
+			break;
+		case 13:
+			idLoaiDichVuDHSC = 100;
+			break;
+		case 14:
+			idLoaiDichVuDHSC = 91;
+			break;
+		case 27:
+			idLoaiDichVuDHSC = 60;
+			break;
+		default:
+			break;
+
+		}
+		return maDV;
+	}
+
+	public void setMaDichVu(String maDichVu) {
+		MaDichVu = maDichVu;
+	}
 
 	public String getTenKhachHang() {
 		return TenKhachHang;
@@ -197,8 +297,9 @@ public class ThongTinTraCuuChung {
 	public String toString() {
 		// TODO Auto-generated method stub
 
-		return TenKhachHang + " " + DiaChiKhachHang + " " + TenThanhToan + " " + DiaChiThanhToan + " "
-				+ DienThoaiLienHe;
+		return "Tên KH :" + TenKhachHang + "\n Đ/ :" + DiaChiKhachHang + "\n Mã thuê bao :" + MaThueBao
+				+ "\n Loại dịch vụ :" + TenDichVuVienThong + "\n Trạng thái :" + TrangThaiThueBao;
+
 	}
 
 }

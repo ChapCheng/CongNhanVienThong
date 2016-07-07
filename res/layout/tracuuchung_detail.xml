@@ -6,6 +6,12 @@
     android:orientation="vertical"
     android:padding="15dp" >
 
+    <ProgressBar
+        android:id="@+id/prbLayThongTin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/ketqua"
         android:layout_width="fill_parent"
@@ -15,12 +21,59 @@
         android:maxLines="100"
         android:minLines="10" />
 
-    <Button
-        android:id="@+id/btnClose"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/button_3d"
-        android:text="Đóng" />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/tranferance_button"
+            android:drawableTop="@drawable/close"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingTop="9dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Đóng" />
+
+        <Button
+            android:id="@+id/btnBaoHong"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/tranferance_button"
+            android:drawableTop="@drawable/bao_hong"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingTop="9dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Báo hỏng" />
+
+        <Button
+            android:id="@+id/btnCall"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/tranferance_button"
+            android:drawableTop="@drawable/call"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingTop="9dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="L.Hệ"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </LinearLayout>

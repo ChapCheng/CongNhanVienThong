@@ -280,28 +280,6 @@ public class BaseListViewAdapter<T> extends BaseAdapter {
 		return true;
 	}
 
-	// public final boolean isTheFirst(String fild, final int pos) {
-	// boolean flag = false;
-	// try {
-	// Field curenField;
-	// curenField = lstPara.get(pos).getClass().getField(fild);
-	// curenField.setAccessible(true);
-	// String curent = curenField.get(lstPara.get(pos)).toString();
-	// if (curenField.equals("1"))
-	// flag = true;
-	//
-	// } catch (NoSuchFieldException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (IllegalArgumentException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (IllegalAccessException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// return flag;
-	// }
+	
 
 }

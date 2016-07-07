@@ -8,8 +8,8 @@ public class TraPhieuWS extends BaseTask {
 	public TraPhieuWS() {
 		// TODO Auto-generated constructor stub
 		super();
-		SOAP_ACTION = "http://tempuri.org/WsTonPhieuHoTroTrucTiep";
-		METHOD_NAME = "WsTonPhieuHoTroTrucTiep";
+		SOAP_ACTION = "http://tempuri.org/WsTraPhieuHoTroTrucTiep";
+		METHOD_NAME = "WsTraPhieuHoTroTrucTiep";
 		NAMESPACE = "http://tempuri.org/";
 		User_WS = "wscskh";
 		Pass_WS = "wscskh@456";
@@ -20,8 +20,19 @@ public class TraPhieuWS extends BaseTask {
 	@Override
 	public Object getResult() {
 		// TODO Auto-generated method stub
-		SoapObject soapObject = (SoapObject) result;
-		return soapObject.getPrimitivePropertySafelyAsString("Result");
+		try {
+			SoapObject soapObject = (SoapObject) result;
+			String kq = soapObject.getPrimitivePropertySafelyAsString("Result");
+			if (kq.equals(""))
+				kq = "Thành công";
+
+			return kq;
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "Có lỗi xảy ra!";
+		}
+
 	}
 
 }

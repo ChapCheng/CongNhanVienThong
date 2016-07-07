@@ -1,6 +1,7 @@
 package control;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import android.location.LocationManager;
 import android.provider.Settings;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
@@ -58,6 +60,7 @@ import congnhanvienthong.entity.dhsc.Device;
 import congnhanvienthong.entity.dhsc.LoaiDichVu;
 import congnhanvienthong.entity.dhsc.LoaiDo;
 import congnhanvienthong.entity.dhsc.NhanVien;
+import congnhanvienthong.entity.dhsc.ThongTinVissaFiberVNN;
 import congnhanvienthong.entity.dhsc.TinhThanhPho;
 
 @SuppressLint("DefaultLocale")
@@ -240,7 +243,8 @@ public class Util {
 
 	}
 
-	public static void GetObjectFromSoapObject(Object object, SoapObject soapObject) {
+	@SuppressWarnings("unchecked")
+	public static <T> void GetObjectFromSoapObject(Object object, SoapObject soapObject) {
 		try {
 			@SuppressWarnings("rawtypes")
 
@@ -258,6 +262,7 @@ public class Util {
 				if (soapObject.hasProperty(name)) {
 					value = soapObject.getProperty(name);
 					val = layStringChuanTuSoap(value.toString());
+
 					if (typeName.contains("String")) {
 						field.set(object, val);
 						// break;
@@ -278,12 +283,23 @@ public class Util {
 						field.setLong(object, Long.valueOf(layStringChuanTuSoap(value.toString())));
 						// break;
 					} else if (typeName.contains("congnhanvienthong")) {
+						if (type.isArray()) {
+							Class<?> c = type.getComponentType();
+							// Obetject[] objects = (Object[]) type.get(obj);
+							SoapObject soap = (SoapObject) soapObject.getProperty(name);
+							int i = soap.getPropertyCount();
+							ArrayList<T> t = GetListData(soap, c, false);
+							T[] arr = (T[]) t.toArray();
+							field.set(object, arr);
 
-						Class<?> c = Class.forName(typeName);
-						Object obj = c.newInstance();
-						SoapObject soap = (SoapObject) soapObject.getProperty(name);
-						GetObjectFromSoapObject(obj, soap);
-						field.set(object, obj);
+						} else {
+
+							Class<?> c = Class.forName(typeName);
+							Object obj = c.newInstance();
+							SoapObject soap = (SoapObject) soapObject.getProperty(name);
+							GetObjectFromSoapObject(obj, soap);
+							field.set(object, obj);
+						}
 					}
 
 				} else {
@@ -497,8 +513,19 @@ public class Util {
 							}
 
 						} else {
-							hienThi = hienThi + "<b>" + annotationField.tenNhan() + "</b>" + ": ";
-							hienThi = hienThi + field.get(obj).toString() + "<br>";
+							Class<?> type = field.getType();
+							if (type.getName().equals("java.util.ArrayList")) {
+								ArrayList<Object> objects = (ArrayList<Object>) field.get(obj);
+								hienThi = hienThi + "<b>" + annotationField.tenNhan() + "</b>" + ": <br><ul>";
+								for (int i = 0; i < objects.size(); i++) {
+
+									hienThi = hienThi + objects.get(i).toString() + "<br>";
+								}
+								hienThi = hienThi+"</ul>";
+							} else {
+								hienThi = hienThi + "<b>" + annotationField.tenNhan() + "</b>" + ": ";
+								hienThi = hienThi + field.get(obj).toString() + "<br>";
+							}
 						}
 
 					}
@@ -511,9 +538,11 @@ public class Util {
 					e.printStackTrace();
 				}
 			}
-			Spanned sp = Html.fromHtml(hienThi.toString());
-			textView.setText(sp);
+			
 		}
+		Spanned sp = Html.fromHtml(hienThi.toString());
+		textView.setMovementMethod(new ScrollingMovementMethod());
+		textView.setText(sp);
 	}
 
 	public static <T> void setTextFromObjectAllField(TextView textView, T obj) {
@@ -553,6 +582,7 @@ public class Util {
 		}
 	}
 
+	@SuppressLint("NewApi")
 	public static String removeAccent(String s) {
 
 		String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
@@ -628,27 +658,22 @@ public class Util {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T GetData(SoapObject input, Context context, Class<T> clazz, String err, String mes, String res) {
-		try {
-			String erros = input.getPrimitivePropertyAsString(err);
-			String mess = (String) input.getPrimitivePropertyAsString(mes);
-			if (erros.toLowerCase().equals("true")) {
-				Util.showAlert(context, mess);
-				return null;
-			} else {
-				SoapObject temp = (SoapObject) input.getProperty(res);
-				Object name = clazz.newInstance();
-				GetObjectFromSoapObject(name, temp);
-				return (T) name;
-
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-
-			return null;
-		}
-
-	}
+	// @SuppressWarnings("unchecked")
+	// public static <T> T[] GetData(SoapObject input, Class<T> clazz, String
+	// err) {
+	// try {
+	// T[] t = (T[]) Array.newInstance(clazz, 100);
+	// int i = input.getPropertyCount();
+	// for()
+	// return (T[]) name;
+	//
+	// }
+	// } catch (Exception e) {
+	// // TODO: handle exception
+	//
+	// return null;
+	// }
+	//
+	// }
 
 }

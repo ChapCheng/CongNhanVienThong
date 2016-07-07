@@ -2,16 +2,16 @@ package com.congnhanvienthong;
 
 import java.util.ArrayList;
 import java.util.Vector;
+
 import org.ksoap2.serialization.SoapObject;
 
-import webservice.BaseTask;
-import webservice.GetProfileTDTask;
-import webservice.WebProtocol;
-import webservice.dhsc.LayListDichVuTask;
 import android.os.Bundle;
 import android.widget.TextView;
 import congnhanvienthong.entity.dhsc.LoaiDichVu;
 import control.Util;
+import webservice.GetProfileTDTask;
+import webservice.WebProtocol;
+import webservice.dhsc.LayListDichVuTask;
 
 public class ActivityProfileTD extends ActivityBaseToDisplay {
 	GetProfileTDTask getProfileTDTask;

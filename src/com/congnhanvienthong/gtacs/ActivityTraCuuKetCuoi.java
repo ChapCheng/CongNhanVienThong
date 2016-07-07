@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -82,8 +83,6 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 	LinearLayout viewMap, viewData;
 	PullToRefreshListView lstData;
 	ArrayList<ThongTinKetCuoi> lstThongTinKetCuoi;
-	ArrayList<ThongTinKetCuoi> lstThongTinKetCuoiCon;
-	ArrayList<ThongTinKetCuoi> lstThongTinKetCuoiHet;
 	ArrayList<ThongTinDonVi> lstThongTinDonVis;
 	ArrayList<VeTinh> lsVeTinhs;
 	ArrayList<LoaiKetCuoi> loaiKetCuois;
@@ -99,7 +98,6 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 	Button btnTimKiem;
 	EditText txtName, txtAdd;
 	GetObjectGTCASInfor getObjectGTCASInfor;
-	// HashSet<LatLng> setToaDo;
 	Animation out, in;
 	long idCapNhat = 0;
 	CapNhatToaDoGtcasTask capNhatToaDoGtcasTask;
@@ -146,31 +144,27 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 		txtInfor = (TextView) body.findViewById(R.id.infor);
 		lstData.setMode(Mode.PULL_FROM_START);
 		lstData.onRefreshComplete();
-		lstData.getRefreshableView().setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				ThongTinKetCuoi ttkc = (ThongTinKetCuoi) parent.getItemAtPosition(position);
-				thongtinCapNhat = ttkc;
-				if (ttkc.isALLOW_EDIT()) {
-					map.clear();
-					creatMaker(ttkc, true, true, true);
-					idCapNhat = ttkc.getM_OBJECT_FID();
-				} else {
-					Toast.makeText(context, "Bạn không được quyền cập nhật tọa độ kết cuối " + ttkc.getM_OBJECT_NAME(),
-							Toast.LENGTH_SHORT).show();
-				}
-				return true;
-			}
-		});
 		lstData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
 				ThongTinKetCuoi ttkc = (ThongTinKetCuoi) parent.getItemAtPosition(position);
-				creatMaker(ttkc, false, false, true);
+				Marker mk = ttkc.getMarker();
+				if (mk != null) {
+					thongtinCapNhat = ttkc;
+					if (ttkc.isALLOW_EDIT() == true)
+						mk.setDraggable(true);
+					else
+						Toast.makeText(context, "Bạn không được quyền cập nhật tọa độ!", Toast.LENGTH_SHORT).show();
+					mk.showInfoWindow();
+					viewMap.startAnimation(in);
+					viewData.startAnimation(out);
+					viewMap.setVisibility(View.VISIBLE);
+					viewData.setVisibility(View.GONE);
+
+				}
 
 			}
 		});
@@ -266,15 +260,12 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						// arg0.setPosition(oldLatLon);
-						map.clear();
-						// CameraPosition cameraPosition = new
-						// CameraPosition.Builder().target(oldLatLon).bearing(45)
-						// .tilt(90).zoom(map.getCameraPosition().zoom).build();
-						// map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
-						// 2000, null);
-						creatMaker(thongtinCapNhat, false, true, true);
+
+						arg0.remove();
+						CameraPosition cameraPosition = new CameraPosition.Builder().target(oldLatLon).bearing(45)
+								.tilt(90).zoom(map.getCameraPosition().zoom).build();
+						map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+						thongtinCapNhat.creatMaker(map, false, true, true);
 
 					}
 				});
@@ -285,10 +276,12 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 						// TODO Auto-generated method stub
 						capNhatToaDoGtcasTask = new CapNhatToaDoGtcasTask();
 						capNhatToaDoGtcasTask.addParam("MaTinhThanh", Util.ttp.getMa_Ttp());
-						capNhatToaDoGtcasTask.addParam("ObjectId", idCapNhat);
+						capNhatToaDoGtcasTask.addParam("ObjectId", thongtinCapNhat.getM_OBJECT_FID());
 						capNhatToaDoGtcasTask.addParam("Long", arg0.getPosition().longitude);
 						capNhatToaDoGtcasTask.addParam("Lat", arg0.getPosition().latitude);
 						capNhatToaDoGtcasTask.addParam("UserName", Util.userName);
+						arg0.setDraggable(false);
+
 						onExecuteToServer(true, null, capNhatToaDoGtcasTask);
 
 					}
@@ -514,8 +507,8 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 				SoapObject res = (SoapObject) arrRes.getProperty(i);
 				ThongTinKetCuoi thontinketcuoi = new ThongTinKetCuoi();
 				Util.GetObjectFromSoapObject(thontinketcuoi, res);
+				thontinketcuoi.creatMaker(map, false, false, false);
 				lstThongTinKetCuoi.add(thontinketcuoi);
-				creatMaker(thontinketcuoi, false, false, false);
 				try {
 					move_lat = Float.parseFloat(thontinketcuoi.getLATITUDE());
 					move_lon = Float.parseFloat(thontinketcuoi.getLONGITUDE());
@@ -560,8 +553,6 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 		case R.id.bttTimKiemKetCuoi:
 			// thongTinTimKiemKetCuoi
 			lstThongTinKetCuoi = new ArrayList<ThongTinKetCuoi>();
-			lstThongTinKetCuoiCon = new ArrayList<ThongTinKetCuoi>();
-			lstThongTinKetCuoiHet = new ArrayList<ThongTinKetCuoi>();
 			map.clear();
 			lstData.setAdapter(null);
 			pageIndex = 1;
@@ -583,57 +574,6 @@ public class ActivityTraCuuKetCuoi extends ActivityBaseToDisplay implements OnCl
 			onExecuteToServer(true, "Tìm kiếm thông tin ?", getObjectGTCASInfor);
 			break;
 		}
-
-	}
-
-	public Marker creatMaker(ThongTinKetCuoi thongTinKetCuoi, boolean setLonLat, boolean setDrag, boolean showInfor) {
-		double lat = 0;
-		double lon = 0;
-		try {
-			lat = Double.parseDouble(thongTinKetCuoi.getLATITUDE());
-			lon = Double.parseDouble(thongTinKetCuoi.getLONGITUDE());
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			Toast.makeText(context, "Chưa có dữ liệu vị trí", Toast.LENGTH_SHORT).show();
-			if (myLocation != null && setLonLat) {
-				lat = myLocation.getLatitude();
-				lon = myLocation.getLongitude();
-			}
-		}
-
-		LatLng latLng = new LatLng(lat, lon);
-		MarkerOptions mko = new MarkerOptions();
-		mko.position(latLng);
-
-		int con = 0;
-		try {
-			con = (int) (thongTinKetCuoi.getO_TOTAL_SIZE() - thongTinKetCuoi.getIN_USED());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		mko.snippet("Dung lượng(tổng/đã dùng/còn trống) :" + thongTinKetCuoi.getO_TOTAL_SIZE() + "/"
-				+ thongTinKetCuoi.getIN_USED() + "/" + con);
-		mko.anchor(0.5f, 1.0f);
-		BitmapDescriptor ketcuoiIcon;
-		if (con == 0)
-			ketcuoiIcon = BitmapDescriptorFactory.fromResource(R.drawable.het);
-		else {
-			ketcuoiIcon = BitmapDescriptorFactory.fromResource(R.drawable.con_dl);
-		}
-		mko.icon(ketcuoiIcon);
-		mko.title(thongTinKetCuoi.getM_OBJECT_NAME());
-
-		mko.draggable(setDrag);
-		Marker m = map.addMarker(mko);
-		if (showInfor) {
-			m.showInfoWindow();
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 14));
-		}
-		viewMap.setVisibility(View.VISIBLE);
-		viewData.setVisibility(View.GONE);
-
-		return null;
 
 	}
 

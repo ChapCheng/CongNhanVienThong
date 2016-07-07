@@ -229,7 +229,14 @@ public class ActivityTimKiemKetCuoiKhongGian extends ActivityBaseToDisplay {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
 				KetCuoi ttkc = (KetCuoi) parent.getItemAtPosition(position);
-				creatMaker(ttkc, false, false, true);
+				Marker mk = ttkc.getMarker();
+				mk.remove();
+				Marker newMK = ttkc.creatMaker(map, true, true);
+
+				viewMap.startAnimation(in);
+				viewData.startAnimation(out);
+				viewMap.setVisibility(View.VISIBLE);
+				viewData.setVisibility(View.GONE);
 
 			}
 		});
@@ -308,8 +315,9 @@ public class ActivityTimKiemKetCuoiKhongGian extends ActivityBaseToDisplay {
 				}
 				temp.setThongTinCong(
 						temp.getO_TOTAL_SIZE() + "/" + temp.getIN_USED() + "/" + temp.getFAULT_PORT() + "/" + con);
+
+				temp.creatMaker(map, false, false);
 				listKetCuoiObj.add(temp);
-				creatMaker(temp, false, false, false);
 			}
 
 			lstData.setMode(Mode.PULL_FROM_START);
@@ -459,55 +467,4 @@ public class ActivityTimKiemKetCuoiKhongGian extends ActivityBaseToDisplay {
 
 	}
 
-	public KetCuoi creatMaker(KetCuoi ketcuoi, boolean setLonLat, boolean setDrag, boolean showInfor) {
-		double lat = 0;
-		double lon = 0;
-		try {
-			lat = Double.parseDouble(ketcuoi.getLatitude());
-			lon = Double.parseDouble(ketcuoi.getLongitude());
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			Toast.makeText(context, "Chưa có dữ liệu vị trí", Toast.LENGTH_SHORT).show();
-			if (myLocation != null && setLonLat) {
-				lat = myLocation.getLatitude();
-				lon = myLocation.getLongitude();
-			}
-		}
-
-		LatLng latLng = new LatLng(lat, lon);
-		MarkerOptions mko = new MarkerOptions();
-		mko.position(latLng);
-
-		int con = 0;
-		try {
-			// con = (int) (ketcuoi.getO_TOTAL_SIZE() - ketcuoi.getIN_USED());
-			con = Integer.parseInt(ketcuoi.getO_TOTAL_SIZE()) - Integer.parseInt(ketcuoi.getIN_USED());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		mko.snippet("Dung lượng(tổng/đã dùng/còn trống) :" + ketcuoi.getO_TOTAL_SIZE() + "/" + ketcuoi.getIN_USED()
-				+ "/" + con);
-		mko.anchor(0.5f, 1.0f);
-		BitmapDescriptor ketcuoiIcon;
-		if (con == 0)
-			ketcuoiIcon = BitmapDescriptorFactory.fromResource(R.drawable.het);
-		else {
-			ketcuoiIcon = BitmapDescriptorFactory.fromResource(R.drawable.con_dl);
-		}
-		mko.icon(ketcuoiIcon);
-		mko.title(ketcuoi.getM_OBJECT_NAME());
-		mko.draggable(setDrag);
-		if (showInfor)
-			map.addMarker(mko).showInfoWindow();
-		else {
-			map.addMarker(mko);
-		}
-		viewMap.setVisibility(View.VISIBLE);
-		viewData.setVisibility(View.GONE);
-
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 14));
-		return ketcuoi;
-
-	}
 }

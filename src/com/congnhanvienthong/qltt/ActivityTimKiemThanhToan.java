@@ -1,6 +1,11 @@
 package com.congnhanvienthong.qltt;
 
-import webservice.qltt.PaymentsWebServices;
+import com.congnhanvienthong.ActivityBaseToDisplay;
+import com.congnhanvienthong.R;
+import com.google.gson.Gson;
+import com.google.zxing.client.android.CaptureActivity;
+
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,15 +17,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.congnhanvienthong.ActivityBaseToDisplay;
-import com.congnhanvienthong.R;
-import com.google.gson.Gson;
-import com.google.zxing.client.android.CaptureActivity;
-
 import congnhanvienthong.entity.qltt.CustomerInfomation;
+import control.PreferenceConnector;
 import control.Util;
+import webservice.qltt.PaymentsWebServices;
 
+@SuppressLint("NewApi")
 public class ActivityTimKiemThanhToan extends ActivityBaseToDisplay implements AsyncResponse {
 
 	private Button btnSearch, bttBarcode;
@@ -34,6 +36,7 @@ public class ActivityTimKiemThanhToan extends ActivityBaseToDisplay implements A
 		super.onCreate(savedInstanceState);
 		setHeader("Thanh toán");
 		setBodyLayout(R.layout.activity_thanhtoan_tim_kiem);
+		PreferenceConnector.writeString(ActivityTimKiemThanhToan.this, PreferenceConnector.PASS, "");
 		bttBarcode = (Button) body.findViewById(R.id.btn_barcode);
 		bttBarcode.setOnClickListener(this);
 		edtThongTinTim = (EditText) body.findViewById(R.id.txtdata);
@@ -70,7 +73,7 @@ public class ActivityTimKiemThanhToan extends ActivityBaseToDisplay implements A
 
 		String authenticationString = sharedPref.getString(Constants.AUTHENTICATION_KEY, "");
 
-		if (authenticationString.isEmpty()) {
+		if (authenticationString.trim().length() == 0) {
 
 			Intent intent = new Intent(ActivityTimKiemThanhToan.this, ActivityAuthentication.class);
 			this.startActivity(intent);
@@ -87,7 +90,7 @@ public class ActivityTimKiemThanhToan extends ActivityBaseToDisplay implements A
 			debtInfoAsync = new GetDebtInfomationAsync(this);
 			debtInfoAsync.delegate = this;
 
-			if (infomationSearch.isEmpty()) {
+			if (infomationSearch.length() == 0) {
 
 				/*
 				 * Toast.makeText(getBaseContext(),
@@ -111,7 +114,7 @@ public class ActivityTimKiemThanhToan extends ActivityBaseToDisplay implements A
 
 			String authenticationString = sharedPref.getString(Constants.AUTHENTICATION_KEY, "");
 
-			if (!authenticationString.isEmpty()) {
+			if (!(authenticationString.trim().length() == 0)) {
 				String authenticationMd5 = Utilities.md5(infomationSearch + authenticationString);
 
 				String username = Util.userName;

@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:contentDescription="@string/thongso"
+    android:fillViewport="true"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Mã dịch vụ"
+            android:textColor="@color/black" />
+
+        <include layout="@layout/layout_edittexxt_search" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dịch Vụ"
+            android:textColor="@color/black" />
+
+        <Spinner
+            android:id="@+id/loaiDichVu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/app_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nghiệp Vụ" />
+
+        <Spinner
+            android:id="@+id/spnNghiepVu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/loai_tra_cuu" />
+
+        <TextView
+            android:id="@+id/lblKetQua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kết quả" />
+
+        <ExpandableListView
+            android:id="@+id/tientrinhsua_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:minHeight="80dp"
+            android:visibility="gone" >
+        </ExpandableListView>
+
+        <LinearLayout
+            android:id="@+id/viewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
+            android:padding="1dp" >
+
+            <TextView
+                android:id="@+id/ketqua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:maxLines="30"
+                android:minLines="8"
+                android:scrollHorizontally="true"
+                android:scrollbars="vertical" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
